@@ -7,6 +7,11 @@
     android:orientation="vertical"
     tools:context="com.example.parcial1.MainActivity">
 
+    <SearchView
+        android:id="@+id/searchView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <android.support.design.widget.TabLayout
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
