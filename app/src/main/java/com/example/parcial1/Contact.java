@@ -1,18 +1,24 @@
 package com.example.parcial1;
 
-public class Contact {
+import java.io.Serializable;
+import java.util.Date;
+
+public class Contact implements Serializable{
     private String name;
     private String lastName;
-    private int id;
+    private String id;
     private String email;
     private String address;
+    private String phone;
+    private Date date;
     private boolean favorite = false;
     private int imageId;
 
-    public Contact(String name, String lastName, int id, String email, String address, int imageId) {
+    public Contact(String name, String lastName, String id, String phone, String email, String address, int imageId) {
         this.name = name;
         this.lastName = lastName;
         this.id = id;
+        this.phone = phone;
         this.email = email;
         this.address = address;
         this.imageId = imageId;
@@ -34,11 +40,11 @@ public class Contact {
         this.lastName = lastName;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -72,5 +78,21 @@ public class Contact {
 
     public void setImageId(int imageId) {
         this.imageId = imageId;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 }
