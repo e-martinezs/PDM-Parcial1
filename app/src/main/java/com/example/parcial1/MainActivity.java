@@ -31,10 +31,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void fillList() {
-        contacts.add(new Contact("name1", "lastname1", 1, "email1", "add1"));
-        contacts.add(new Contact("name2", "lastname2", 2, "email2", "add2"));
-        contacts.add(new Contact("name3", "lastname3", 3, "email3", "add3"));
-        contacts.add(new Contact("name4", "lastname4", 4, "email4", "add4"));
-        contacts.add(new Contact("name5", "lastname5", 5, "email5", "add5"));
+        contacts.add(new Contact("name1", "lastname1", 1, "email1", "add1", R.drawable.ic_person));
+        contacts.add(new Contact("name2", "lastname2", 2, "email2", "add2", R.drawable.ic_person));
+        contacts.add(new Contact("name3", "lastname3", 3, "email3", "add3", R.drawable.ic_person));
+        contacts.add(new Contact("name4", "lastname4", 4, "email4", "add4", R.drawable.ic_person));
+        contacts.add(new Contact("name5", "lastname5", 5, "email5", "add5", R.drawable.ic_person));
     }
 }

@@ -7,13 +7,15 @@ public class Contact {
     private String email;
     private String address;
     private boolean favorite = false;
+    private int imageId;
 
-    public Contact(String name, String lastName, int id, String email, String address) {
+    public Contact(String name, String lastName, int id, String email, String address, int imageId) {
         this.name = name;
         this.lastName = lastName;
         this.id = id;
         this.email = email;
         this.address = address;
+        this.imageId = imageId;
     }
 
     public String getName() {
@@ -62,5 +64,13 @@ public class Contact {
 
     public void setFavorite(boolean favorite) {
         this.favorite = favorite;
+    }
+
+    public int getImageId() {
+        return imageId;
+    }
+
+    public void setImageId(int imageId) {
+        this.imageId = imageId;
     }
 }
