@@ -31,10 +31,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void fillList() {
-        contacts.add(new Contact("name1", "lastname1", 1, "email1", "add1", R.drawable.ic_person));
-        contacts.add(new Contact("name2", "lastname2", 2, "email2", "add2", R.drawable.ic_person));
-        contacts.add(new Contact("name3", "lastname3", 3, "email3", "add3", R.drawable.ic_person));
-        contacts.add(new Contact("name4", "lastname4", 4, "email4", "add4", R.drawable.ic_person));
-        contacts.add(new Contact("name5", "lastname5", 5, "email5", "add5", R.drawable.ic_person));
+        contacts.add(new Contact("name1", "lastname1", "1", "phone1", "email1", "add1", R.drawable.ic_person));
+        contacts.add(new Contact("name2", "lastname2", "2", "phone2", "email2", "add2", R.drawable.ic_person));
+        contacts.add(new Contact("name3", "lastname3", "3", "phone3", "email3", "add3", R.drawable.ic_person));
+        contacts.add(new Contact("name4", "lastname4", "4", "phone4", "email4", "add4", R.drawable.ic_person));
+        contacts.add(new Contact("name5", "lastname5", "5", "phone5", "email5", "add5", R.drawable.ic_person));
+        contacts.add(new Contact("name6", "lastname6", "6", "phone6", "email6", "add6", R.drawable.ic_person));
+        contacts.add(new Contact("name7", "lastname7", "7", "phone7", "email7", "add7", R.drawable.ic_person));
+        contacts.add(new Contact("name8", "lastname8", "8", "phone8", "email8", "add8", R.drawable.ic_person));
+        contacts.add(new Contact("name9", "lastname9", "9", "phone9", "email9", "add9", R.drawable.ic_person));
+        contacts.add(new Contact("name10", "lastname10", "10", "phone10", "email10", "add10", R.drawable.ic_person));
+        contacts.add(new Contact("name11", "lastname11", "11", "phone11", "email11", "add11", R.drawable.ic_person));
     }
 }

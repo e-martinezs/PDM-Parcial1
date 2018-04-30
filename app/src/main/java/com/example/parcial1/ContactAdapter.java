@@ -1,10 +1,12 @@
 package com.example.parcial1;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -79,6 +81,17 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
                 }
             }
         });
+
+        holder.cardView.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Intent intent = new Intent(context.getApplicationContext(), ContactInfoActivity.class);
+                intent.setAction(Intent.ACTION_SEND);
+                intent.putExtra("CONTACT", contact);
+                intent.setType("text/plain");
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -87,12 +100,14 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
     }
 
     public class ContactViewHolder extends RecyclerView.ViewHolder {
+        private CardView cardView;
         private ImageView imageImageView;
         private TextView nameTextView;
         private CheckBox favoriteCheckbox;
 
         public ContactViewHolder(View view) {
             super(view);
+            cardView = view.findViewById(R.id.cardView);
             imageImageView = view.findViewById(R.id.card_imageImageView);
             nameTextView = view.findViewById(R.id.card_nameTextView);
             favoriteCheckbox = view.findViewById(R.id.card_favoriteCheckbox);

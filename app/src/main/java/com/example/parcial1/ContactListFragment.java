@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 /**
  * A fragment representing a list of Items.
  * <p/>
- * Activities contai    ning this fragment MUST implement the {@link OnListFragmentInteractionListener}
+ * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
 public class ContactListFragment extends Fragment {
