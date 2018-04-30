@@ -1,6 +1,10 @@
 package com.example.parcial1;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,6 +55,11 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
         final Contact contact = contacts.get(position);
         String fullName = contact.getName() + " " + contact.getLastName();
         holder.nameTextView.setText(fullName);
+
+        Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), contact.getImageId());
+        RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(context.getResources(), bitmap);
+        roundedBitmapDrawable.setCircular(true);
+        holder.imageImageView.setImageDrawable(roundedBitmapDrawable);
 
         if (contact.isFavorite()) {
             holder.favoriteCheckbox.setChecked(true);
