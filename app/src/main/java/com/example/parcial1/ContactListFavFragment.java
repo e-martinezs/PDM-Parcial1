@@ -10,7 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 /**
  * A fragment representing a list of Items.
@@ -18,15 +17,7 @@ import android.widget.LinearLayout;
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class ContactListFragment extends Fragment {
-
-    /*private boolean favorite;
-
-    public static ContactListFragment newInstance(boolean favorite) {
-        ContactListFragment fragment = new ContactListFragment();
-        fragment.favorite = favorite;
-        return fragment;
-    }*/
+public class ContactListFavFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -42,7 +33,7 @@ public class ContactListFragment extends Fragment {
             LinearLayoutManager linearManager = new LinearLayoutManager((container.getContext()));
             recyclerView.setLayoutManager(linearManager);
         }
-        ContactAdapter adapter = new ContactAdapter(container.getContext(), false);
+        ContactAdapter adapter = new ContactAdapter(container.getContext(), true);
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
 

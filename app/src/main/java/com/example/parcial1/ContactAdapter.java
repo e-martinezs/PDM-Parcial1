@@ -2,10 +2,15 @@ package com.example.parcial1;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -26,12 +31,10 @@ import java.util.List;
 public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactViewHolder> {
     private List<Contact> contacts = new ArrayList<>();
     private Context context;
-    private boolean favorite;
 
     public ContactAdapter(Context context, boolean favorite) {
         this.context = context;
-        this.favorite = favorite;
-
+        contacts = new ArrayList<>();
         if (favorite) {
             for (Contact contact : MainActivity.contacts) {
                 if (contact.isFavorite()) {
@@ -39,9 +42,9 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
                 }
             }
         } else {
-           for (Contact contact : MainActivity.contacts){
-               contacts.add(contact);
-           }
+            for (Contact contact : MainActivity.contacts){
+                contacts.add(contact);
+            }
         }
     }
 
@@ -49,6 +52,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
     public ContactViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.contact_cardview, parent, false);
+
         return new ContactViewHolder(view);
     }
 
@@ -85,11 +89,22 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
         holder.cardView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                Intent intent = new Intent(context.getApplicationContext(), ContactInfoActivity.class);
-                intent.setAction(Intent.ACTION_SEND);
-                intent.putExtra("CONTACT", contact);
-                intent.setType("text/plain");
-                context.startActivity(intent);
+                if (v.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                    Intent intent = new Intent(context.getApplicationContext(), ContactInfoActivity.class);
+                    intent.setAction(Intent.ACTION_SEND);
+                    intent.putExtra("CONTACT", contact);
+                    intent.setType("text/plain");
+                    context.startActivity(intent);
+                }else if(v.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("CONTACT", contact);
+                    ContactInfoFragment fragment = new ContactInfoFragment();
+                    fragment.setArguments(bundle);
+                    FragmentManager fragmentManager = ((AppCompatActivity)context).getSupportFragmentManager();
+                    FragmentTransaction transaction = fragmentManager.beginTransaction();
+                    transaction.replace(R.id.contactInfoFragment, fragment);
+                    transaction.commit();
+                }
             }
         });
     }

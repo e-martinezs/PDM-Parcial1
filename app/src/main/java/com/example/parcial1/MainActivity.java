@@ -1,11 +1,16 @@
 package com.example.parcial1;
 
 import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.SearchView;
 
 import java.util.ArrayList;
@@ -15,31 +20,51 @@ public class MainActivity extends AppCompatActivity {
     public static List<Contact> contacts = new ArrayList<>();
     public static List<Contact> full_contacts = new ArrayList<>();
     public static ViewPagerAdapter viewPagerAdapter;
+    public static Contact selectedContact;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        fillList();
-        contacts.addAll(full_contacts);
+        if (savedInstanceState == null) {
+            contacts = new ArrayList<>();
+            full_contacts = new ArrayList<>();
+            fillList();
+            contacts.addAll(full_contacts);
+        }
+
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+            if (selectedContact != null) {
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("CONTACT", selectedContact);
+                ContactInfoFragment fragment = new ContactInfoFragment();
+                fragment.setArguments(bundle);
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.replace(R.id.contactInfoFragment, fragment);
+                transaction.commit();
+
+                selectedContact = null;
+            }
+        }
 
         viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         ViewPager viewPager = findViewById(R.id.viewPager);
         viewPager.setAdapter(viewPagerAdapter);
 
-        viewPagerAdapter.addFragment(ContactListFragment.newInstance(false), getString(R.string.tab_contacts));
-        viewPagerAdapter.addFragment(ContactListFragment.newInstance(true), getString(R.string.tab_favorites));
+        viewPagerAdapter.addFragment(new ContactListFragment(), getString(R.string.tab_contacts));
+        viewPagerAdapter.addFragment(new ContactListFavFragment(), getString(R.string.tab_favorites));
 
         TabLayout tabLayout = findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);
 
-        SearchView searchView = findViewById(R.id.searchView);
+        final SearchView searchView = findViewById(R.id.searchView);
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                contacts = new ArrayList<>();
-                doSearch(query);
+                searchView.clearFocus();
                 return true;
             }
 
@@ -54,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onClose() {
                 contacts.addAll(full_contacts);
+                searchView.clearFocus();
                 return true;
             }
         });
@@ -73,12 +99,12 @@ public class MainActivity extends AppCompatActivity {
         full_contacts.add(new Contact("name11", "lastname11", "11", "phone11", "email11", "add11", R.drawable.ic_person));
     }
 
-    private void doSearch(String query){
-        String queryRegex = query+".*";
+    private void doSearch(String query) {
+        String queryRegex = query + ".*";
         String fullName;
-        for (Contact c:  full_contacts){
-            fullName = c.getName()+" "+c.getLastName();
-            if (fullName.matches(queryRegex)){
+        for (Contact c : full_contacts) {
+            fullName = c.getName() + " " + c.getLastName();
+            if (fullName.matches(queryRegex)) {
                 contacts.add(c);
             }
         }
