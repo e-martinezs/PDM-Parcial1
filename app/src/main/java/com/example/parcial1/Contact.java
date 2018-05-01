@@ -11,8 +11,8 @@ public class Contact implements Serializable{
     private String address;
     private String phone;
     private Date date;
-    private boolean favorite = false;
     private int imageId;
+    private boolean favorite = false;
 
     public Contact(String name, String lastName, String id, String phone, String email, String address, int imageId) {
         this.name = name;
