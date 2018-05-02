@@ -20,14 +20,6 @@ import android.widget.LinearLayout;
  */
 public class ContactListFragment extends Fragment {
 
-    /*private boolean favorite;
-
-    public static ContactListFragment newInstance(boolean favorite) {
-        ContactListFragment fragment = new ContactListFragment();
-        fragment.favorite = favorite;
-        return fragment;
-    }*/
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_contact_list, container, false);

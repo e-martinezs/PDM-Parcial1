@@ -28,7 +28,7 @@ public class ContactInfoActivity extends AppCompatActivity{
         TextView addressTextView = findViewById(R.id.info_addressTextView);
 
         Intent intent = getIntent();
-        Contact contact = (Contact)intent.getSerializableExtra("CONTACT");
+        Contact contact = intent.getParcelableExtra("CONTACT");
 
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
             MainActivity.selectedContact = contact;

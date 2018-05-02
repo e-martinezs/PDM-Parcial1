@@ -33,7 +33,7 @@ public class ContactInfoFragment extends Fragment {
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
-            Contact contact = (Contact) bundle.getSerializable("CONTACT");
+            Contact contact = bundle.getParcelable("CONTACT");
 
             Bitmap bitmap = BitmapFactory.decodeResource(getResources(), contact.getImageId());
             RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), bitmap);

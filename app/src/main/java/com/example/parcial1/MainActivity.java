@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.provider.ContactsContract;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -16,6 +17,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.SearchView;
 
@@ -23,8 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    public static List<Contact> contacts = new ArrayList<>();
-    public static List<Contact> full_contacts = new ArrayList<>();
+    public static ArrayList<Contact> contacts = new ArrayList<>();
+    public static ArrayList<Contact> full_contacts = new ArrayList<>();
     public static ViewPagerAdapter viewPagerAdapter;
     public static Contact selectedContact;
     public static String lastQuery = "";
@@ -35,17 +37,19 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         if (savedInstanceState == null) {
-            contacts = new ArrayList<>();
             full_contacts = new ArrayList<>();
             fillList();
             getContacts();
-            contacts.addAll(full_contacts);
+        }else{
+            full_contacts = savedInstanceState.getParcelableArrayList("CONTACTS");
         }
+        contacts = new ArrayList<>();
+        contacts.addAll(full_contacts);
 
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             if (selectedContact != null) {
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("CONTACT", selectedContact);
+                bundle.putParcelable("CONTACT", selectedContact);
                 ContactInfoFragment fragment = new ContactInfoFragment();
                 fragment.setArguments(bundle);
                 FragmentManager fragmentManager = getSupportFragmentManager();
@@ -66,6 +70,15 @@ public class MainActivity extends AppCompatActivity {
 
         TabLayout tabLayout = findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);
+
+        FloatingActionButton addButton = findViewById(R.id.addButton);
+        addButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), AddContactActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -105,6 +118,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         return true;
+    }
+
+    protected void onSaveInstanceState(Bundle bundle) {
+        bundle.putParcelableArrayList("CONTACTS", contacts);
+        super.onSaveInstanceState(bundle);
     }
 
     private void fillList() {
@@ -174,6 +192,12 @@ public class MainActivity extends AppCompatActivity {
                 contacts.add(c);
             }
         }
+        viewPagerAdapter.notifyDataSetChanged();
+    }
+
+    public static void addContact(Contact contact){
+        full_contacts.add(contact);
+        contacts.add(contact);
         viewPagerAdapter.notifyDataSetChanged();
     }
 }
