@@ -13,6 +13,9 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.SearchView;
 
@@ -62,21 +65,27 @@ public class MainActivity extends AppCompatActivity {
 
         TabLayout tabLayout = findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);
+    }
 
-        final SearchView searchView = findViewById(R.id.searchView);
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        final MenuItem item = menu.findItem(R.id.searchView);
+        final SearchView searchView = (SearchView)item.getActionView();
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 searchView.clearFocus();
-                return true;
+                return false;
             }
 
             @Override
             public boolean onQueryTextChange(String query) {
                 contacts = new ArrayList<>();
                 doSearch(query);
-                return true;
+                return false;
             }
         });
         searchView.setOnCloseListener(new SearchView.OnCloseListener() {
@@ -84,9 +93,11 @@ public class MainActivity extends AppCompatActivity {
             public boolean onClose() {
                 contacts.addAll(full_contacts);
                 searchView.clearFocus();
-                return true;
+                item.collapseActionView();
+                return false;
             }
         });
+        return true;
     }
 
     private void fillList() {
