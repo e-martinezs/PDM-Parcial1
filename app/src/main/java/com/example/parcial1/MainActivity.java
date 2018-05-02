@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     public static List<Contact> full_contacts = new ArrayList<>();
     public static ViewPagerAdapter viewPagerAdapter;
     public static Contact selectedContact;
+    public static String lastQuery = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +75,9 @@ public class MainActivity extends AppCompatActivity {
         final MenuItem item = menu.findItem(R.id.searchView);
         final SearchView searchView = (SearchView)item.getActionView();
 
+        searchView.setQuery(lastQuery, false);
+        lastQuery = "";
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -84,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextChange(String query) {
                 contacts = new ArrayList<>();
+                lastQuery = query;
                 doSearch(query);
                 return false;
             }
@@ -91,7 +96,9 @@ public class MainActivity extends AppCompatActivity {
         searchView.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
+                contacts = new ArrayList<>();
                 contacts.addAll(full_contacts);
+                viewPagerAdapter.notifyDataSetChanged();
                 searchView.clearFocus();
                 item.collapseActionView();
                 return false;
