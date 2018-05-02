@@ -29,6 +29,7 @@ public class ContactInfoFragment extends Fragment {
         TextView emailTextView = view.findViewById(R.id.info_emailTextView);
         TextView phoneTextView = view.findViewById(R.id.info_phoneTextView);
         TextView idTextView = view.findViewById(R.id.info_idTextView);
+        TextView addressTextView = view.findViewById(R.id.info_addressTextView);
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -41,12 +42,10 @@ public class ContactInfoFragment extends Fragment {
 
             String fullName = contact.getName() + " " + contact.getLastName();
             nameTextView.setText(fullName);
-
             emailTextView.setText(contact.getEmail());
-
             phoneTextView.setText(contact.getPhone());
-
             idTextView.setText(contact.getId());
+            addressTextView.setText(contact.getAddress());
         }
 
         return view;

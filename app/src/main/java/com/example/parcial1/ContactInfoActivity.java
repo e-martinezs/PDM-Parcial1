@@ -25,6 +25,7 @@ public class ContactInfoActivity extends AppCompatActivity{
         TextView emailTextView = findViewById(R.id.info_emailTextView);
         TextView phoneTextView = findViewById(R.id.info_phoneTextView);
         TextView idTextView = findViewById(R.id.info_idTextView);
+        TextView addressTextView = findViewById(R.id.info_addressTextView);
 
         Intent intent = getIntent();
         Contact contact = (Contact)intent.getSerializableExtra("CONTACT");
@@ -41,11 +42,9 @@ public class ContactInfoActivity extends AppCompatActivity{
 
         String fullName = contact.getName()+" "+contact.getLastName();
         nameTextView.setText(fullName);
-
         emailTextView.setText(contact.getEmail());
-
         phoneTextView.setText(contact.getPhone());
-
         idTextView.setText(contact.getId());
+        addressTextView.setText(contact.getAddress());
     }
 }

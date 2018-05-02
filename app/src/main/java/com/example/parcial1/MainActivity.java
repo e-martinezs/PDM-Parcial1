@@ -1,9 +1,12 @@
 package com.example.parcial1;
 
 import android.app.SearchManager;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.database.Cursor;
+import android.provider.ContactsContract;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -31,10 +34,11 @@ public class MainActivity extends AppCompatActivity {
             contacts = new ArrayList<>();
             full_contacts = new ArrayList<>();
             fillList();
+            getContacts();
             contacts.addAll(full_contacts);
         }
 
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             if (selectedContact != null) {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("CONTACT", selectedContact);
@@ -97,6 +101,50 @@ public class MainActivity extends AppCompatActivity {
         full_contacts.add(new Contact("name9", "lastname9", "9", "phone9", "email9", "add9", R.drawable.ic_person));
         full_contacts.add(new Contact("name10", "lastname10", "10", "phone10", "email10", "add10", R.drawable.ic_person));
         full_contacts.add(new Contact("name11", "lastname11", "11", "phone11", "email11", "add11", R.drawable.ic_person));
+    }
+
+    private void getContacts() {
+        ContentResolver cr = getContentResolver();
+        Cursor cursor = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
+        if (cursor.getCount() > 0) {
+            while (cursor.moveToNext()) {
+                String id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
+                String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+
+                Contact contact = new Contact(name, "lastname", id, "phone", "email", "add", R.drawable.ic_person);
+                full_contacts.add(contact);
+
+                // get the phone number
+                if (Integer.parseInt(cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
+                    Cursor pCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", new String[]{id}, null);
+                    while (pCur.moveToNext()) {
+                        String phone = pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                        contact.setPhone(phone);
+                    }
+                    pCur.close();
+                }
+
+                // get email and type
+                Cursor emailCur = cr.query(ContactsContract.CommonDataKinds.Email.CONTENT_URI, null, ContactsContract.CommonDataKinds.Email.CONTACT_ID + " = ?", new String[]{id}, null);
+                while (emailCur.moveToNext()) {
+                    String email = emailCur.getString(emailCur.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA));
+                    contact.setEmail(email);
+                }
+                emailCur.close();
+
+                //Get Postal Address....
+                Cursor addrCur = cr.query(ContactsContract.CommonDataKinds.StructuredPostal.CONTENT_URI, null, ContactsContract.Data.CONTACT_ID + " = ?", new String[]{id}, null);
+                while (addrCur.moveToNext()) {
+                    String street = addrCur.getString(addrCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredPostal.STREET));
+                    String city = addrCur.getString(addrCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredPostal.CITY));
+                    String state = addrCur.getString(addrCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredPostal.REGION));
+                    String country = addrCur.getString(addrCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredPostal.COUNTRY));
+                    String address = street+" "+city+" "+state+" "+country;
+                    contact.setAddress(address);
+                }
+                addrCur.close();
+            }
+        }
     }
 
     private void doSearch(String query) {
