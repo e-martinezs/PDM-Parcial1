@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
@@ -35,10 +37,16 @@ public class ContactInfoActivity extends AppCompatActivity{
             finish();
         }
 
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), contact.getImageId());
+        Uri imageUri = Uri.parse(contact.getImageUri());
+        /*Bitmap bitmap = null;
+        try {
+            bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
+        }catch (Exception e){}
+        //Bitmap bitmap = BitmapFactory.decodeResource(getResources(), contact.getImageId());
         RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), bitmap);
         roundedBitmapDrawable.setCircular(true);
-        imageImageView.setImageDrawable(roundedBitmapDrawable);
+        imageImageView.setImageDrawable(roundedBitmapDrawable);*/
+        imageImageView.setImageURI(imageUri);
 
         String fullName = contact.getName()+" "+contact.getLastName();
         nameTextView.setText(fullName);

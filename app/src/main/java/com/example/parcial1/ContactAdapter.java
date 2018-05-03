@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
@@ -62,10 +64,16 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
         String fullName = contact.getName() + " " + contact.getLastName();
         holder.nameTextView.setText(fullName);
 
-        Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), contact.getImageId());
+        Uri imageUri = Uri.parse(contact.getImageUri());
+        /*Bitmap bitmap = null;
+        try {
+            bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), imageUri);
+        }catch (Exception e){}
+        // Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), contact.getImageId());
         RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(context.getResources(), bitmap);
         roundedBitmapDrawable.setCircular(true);
-        holder.imageImageView.setImageDrawable(roundedBitmapDrawable);
+        holder.imageImageView.setImageDrawable(roundedBitmapDrawable);*/
+        holder.imageImageView.setImageURI(imageUri);
 
         if (contact.isFavorite()) {
             holder.favoriteCheckbox.setChecked(true);

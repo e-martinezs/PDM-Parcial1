@@ -21,11 +21,12 @@
 
             <ImageView
                 android:id="@+id/card_imageImageView"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:src="@drawable/ic_person"
-                android:layout_margin="4dp"/>
+                android:layout_margin="4dp"
+                android:scaleType="centerCrop"
+                android:adjustViewBounds="true"/>
 
             <TextView
                 android:id="@+id/card_nameTextView"

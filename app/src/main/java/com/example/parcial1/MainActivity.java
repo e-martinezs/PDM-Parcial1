@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
+import android.net.Uri;
 import android.provider.ContactsContract;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
@@ -36,11 +37,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        System.out.println("CREATED"+savedInstanceState);
         if (savedInstanceState == null) {
             full_contacts = new ArrayList<>();
             fillList();
             getContacts();
         }else{
+            System.out.println("SAVE DATA");
             full_contacts = savedInstanceState.getParcelableArrayList("CONTACTS");
         }
         contacts = new ArrayList<>();
@@ -126,17 +129,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void fillList() {
-        full_contacts.add(new Contact("name1", "lastname1", "1", "phone1", "email1", "add1", R.drawable.ic_person));
-        full_contacts.add(new Contact("name2", "lastname2", "2", "phone2", "email2", "add2", R.drawable.ic_person));
-        full_contacts.add(new Contact("name3", "lastname3", "3", "phone3", "email3", "add3", R.drawable.ic_person));
-        full_contacts.add(new Contact("name4", "lastname4", "4", "phone4", "email4", "add4", R.drawable.ic_person));
-        full_contacts.add(new Contact("name5", "lastname5", "5", "phone5", "email5", "add5", R.drawable.ic_person));
-        full_contacts.add(new Contact("name6", "lastname6", "6", "phone6", "email6", "add6", R.drawable.ic_person));
-        full_contacts.add(new Contact("name7", "lastname7", "7", "phone7", "email7", "add7", R.drawable.ic_person));
-        full_contacts.add(new Contact("name8", "lastname8", "8", "phone8", "email8", "add8", R.drawable.ic_person));
-        full_contacts.add(new Contact("name9", "lastname9", "9", "phone9", "email9", "add9", R.drawable.ic_person));
-        full_contacts.add(new Contact("name10", "lastname10", "10", "phone10", "email10", "add10", R.drawable.ic_person));
-        full_contacts.add(new Contact("name11", "lastname11", "11", "phone11", "email11", "add11", R.drawable.ic_person));
+        Uri uri = Uri.parse("android.resource://"+getPackageName()+"/drawable/ic_person");
+        full_contacts.add(new Contact("name1", "lastname1", "1", "phone1", "email1", "add1", uri.toString()));
+        full_contacts.add(new Contact("name2", "lastname2", "2", "phone2", "email2", "add2", uri.toString()));
+        full_contacts.add(new Contact("name3", "lastname3", "3", "phone3", "email3", "add3", uri.toString()));
+        full_contacts.add(new Contact("name4", "lastname4", "4", "phone4", "email4", "add4", uri.toString()));
+        full_contacts.add(new Contact("name5", "lastname5", "5", "phone5", "email5", "add5", uri.toString()));
+        full_contacts.add(new Contact("name6", "lastname6", "6", "phone6", "email6", "add6", uri.toString()));
+        full_contacts.add(new Contact("name7", "lastname7", "7", "phone7", "email7", "add7", uri.toString()));
+        full_contacts.add(new Contact("name8", "lastname8", "8", "phone8", "email8", "add8", uri.toString()));
+        full_contacts.add(new Contact("name9", "lastname9", "9", "phone9", "email9", "add9", uri.toString()));
+        full_contacts.add(new Contact("name10", "lastname10", "10", "phone10", "email10", "add10", uri.toString()));
+        full_contacts.add(new Contact("name11", "lastname11", "11", "phone11", "email11", "add11", uri.toString()));
     }
 
     private void getContacts() {
@@ -147,7 +151,8 @@ public class MainActivity extends AppCompatActivity {
                 String id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
                 String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
 
-                Contact contact = new Contact(name, "lastname", id, "phone", "email", "add", R.drawable.ic_person);
+                Uri uri = Uri.parse("android.resource://"+getPackageName()+"/drawable/ic_person");
+                Contact contact = new Contact(name, "lastname", id, "phone", "email", "add", uri.toString());
                 full_contacts.add(contact);
 
                 // get the phone number

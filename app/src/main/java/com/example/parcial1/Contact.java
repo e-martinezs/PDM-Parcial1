@@ -1,5 +1,6 @@
 package com.example.parcial1;
 
+import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -13,18 +14,18 @@ public class Contact implements Parcelable {
     private String email;
     private String address;
     private String phone;
+    private String imageUri;
     private Date date;
-    private int imageId;
     private boolean favorite = false;
 
-    public Contact(String name, String lastName, String id, String phone, String email, String address, int imageId) {
+    public Contact(String name, String lastName, String id, String phone, String email, String address, String imageUri) {
         this.name = name;
         this.lastName = lastName;
         this.id = id;
         this.phone = phone;
         this.email = email;
         this.address = address;
-        this.imageId = imageId;
+        this.imageUri = imageUri;
     }
 
     protected Contact(Parcel in) {
@@ -34,7 +35,7 @@ public class Contact implements Parcelable {
         email = in.readString();
         address = in.readString();
         phone = in.readString();
-        imageId = in.readInt();
+        imageUri = in.readString();
         favorite = in.readByte() != 0;
     }
 
@@ -63,7 +64,7 @@ public class Contact implements Parcelable {
         parcel.writeString(email);
         parcel.writeString(address);
         parcel.writeString(phone);
-        parcel.writeInt(imageId);
+        parcel.writeString(imageUri);
         parcel.writeByte((byte) (favorite ? 1 : 0));
     }
 
@@ -115,12 +116,12 @@ public class Contact implements Parcelable {
         this.favorite = favorite;
     }
 
-    public int getImageId() {
-        return imageId;
+    public String getImageUri() {
+        return imageUri;
     }
 
-    public void setImageId(int imageId) {
-        this.imageId = imageId;
+    public void setImageUri(String imageUri) {
+        this.imageUri = imageUri;
     }
 
     public String getPhone() {
