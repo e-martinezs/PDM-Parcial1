@@ -24,9 +24,9 @@
                     android:layout_height="200dp"
                     android:layout_gravity="center"
                     android:layout_margin="4dp"
+                    android:adjustViewBounds="true"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/ic_person"
-                    android:adjustViewBounds="true"/>
+                    android:src="@drawable/ic_person" />
 
                 <android.support.design.widget.FloatingActionButton
                     android:id="@+id/add_imageButton"

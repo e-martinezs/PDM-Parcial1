@@ -34,21 +34,19 @@ public class AddContactActivity extends AppCompatActivity{
         final EditText addressEditText = findViewById(R.id.add_addressEditText);
         imageView = findViewById(R.id.add_imageImageView);
 
-       final Uri defaultUri = Uri.parse("android.resource://" + getPackageName() + "/drawable/ic_person");
-        /*Bitmap bitmap = null;
-        try {
-            bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), defaultUri);
-        }catch (Exception e){}
-        RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), bitmap);
-        roundedBitmapDrawable.setCircular(true);
-        imageView.setImageDrawable(roundedBitmapDrawable);*/
-
+        final Uri defaultUri = Uri.parse("android.resource://" + getPackageName() + "/drawable/ic_person");
         if (savedInstanceState == null) {
-
+            uri = defaultUri;
         }else{
             uri = Uri.parse(savedInstanceState.getString("URI"));
         }
-        imageView.setImageURI(uri);
+        Bitmap bitmap = null;
+        try {
+            bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+        }catch (Exception e){}
+        RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), bitmap);
+        roundedBitmapDrawable.setCircular(true);
+        imageView.setImageDrawable(roundedBitmapDrawable);
 
         FloatingActionButton imageButton = findViewById(R.id.add_imageButton);
         imageButton.setOnClickListener(new View.OnClickListener(){
@@ -100,13 +98,13 @@ public class AddContactActivity extends AppCompatActivity{
                 if (uri == null) {
                     uri = Uri.parse("android.resource://" + getPackageName() + "/drawable/ic_person");
                 }
-                /*Bitmap bitmap = null;
+                Bitmap bitmap = null;
                 try {
                     bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
                 }catch (Exception e){}
                 RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), bitmap);
                 roundedBitmapDrawable.setCircular(true);
-                imageView.setImageDrawable(roundedBitmapDrawable);*/
+                imageView.setImageDrawable(roundedBitmapDrawable);
             }
         }
     }

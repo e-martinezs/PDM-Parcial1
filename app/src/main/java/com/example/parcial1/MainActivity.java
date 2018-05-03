@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (savedInstanceState == null) {
             full_contacts = new ArrayList<>();
-            fillList();
+            //fillList();
             getContacts();
         } else {
             full_contacts = savedInstanceState.getParcelableArrayList("CONTACTS");
@@ -194,13 +194,8 @@ public class MainActivity extends AppCompatActivity {
                 Uri imageUri = getPhotoUri(Long.parseLong(id));
                 if (imageUri == null) {
                     imageUri = defaultUri;
-                    System.out.println("DEFAULT");
                 }
-                try {
-                    contact.setImageUri(imageUri.toString());
-                }catch (Exception e){
-                    contact.setImageUri(Contact.defaultUri.toString());
-                }
+                contact.setImageUri(imageUri.toString());
             }
         }
     }

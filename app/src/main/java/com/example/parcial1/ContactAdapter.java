@@ -61,19 +61,18 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
     @Override
     public void onBindViewHolder(final ContactViewHolder holder, int position) {
         final Contact contact = contacts.get(position);
-        String fullName = contact.getName() + " " + contact.getLastName();
+        //String fullName = contact.getName() + " " + contact.getLastName();
+        String fullName = contact.getName();
         holder.nameTextView.setText(fullName);
 
         Uri imageUri = Uri.parse(contact.getImageUri());
-        /*Bitmap bitmap = null;
+        Bitmap bitmap = null;
         try {
             bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), imageUri);
         }catch (Exception e){}
-        // Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), contact.getImageId());
         RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(context.getResources(), bitmap);
         roundedBitmapDrawable.setCircular(true);
-        holder.imageImageView.setImageDrawable(roundedBitmapDrawable);*/
-        holder.imageImageView.setImageURI(imageUri);
+        holder.imageImageView.setImageDrawable(roundedBitmapDrawable);
 
         if (contact.isFavorite()) {
             holder.favoriteCheckbox.setChecked(true);

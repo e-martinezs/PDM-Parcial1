@@ -38,15 +38,13 @@ public class ContactInfoActivity extends AppCompatActivity{
         }
 
         Uri imageUri = Uri.parse(contact.getImageUri());
-        /*Bitmap bitmap = null;
+        Bitmap bitmap = null;
         try {
             bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
         }catch (Exception e){}
-        //Bitmap bitmap = BitmapFactory.decodeResource(getResources(), contact.getImageId());
         RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), bitmap);
         roundedBitmapDrawable.setCircular(true);
-        imageImageView.setImageDrawable(roundedBitmapDrawable);*/
-        imageImageView.setImageURI(imageUri);
+        imageImageView.setImageDrawable(roundedBitmapDrawable);
 
         String fullName = contact.getName()+" "+contact.getLastName();
         nameTextView.setText(fullName);
