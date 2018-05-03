@@ -2,10 +2,13 @@ package com.example.parcial1;
 
 import android.app.SearchManager;
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.ContactsContract;
 import android.support.design.widget.FloatingActionButton;
@@ -22,6 +25,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.SearchView;
 
+import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,13 +41,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        System.out.println("CREATED"+savedInstanceState);
+        Uri defaultUri = Uri.parse("android.resource://" + getPackageName() + "/drawable/ic_person");
+        Contact.defaultUri = defaultUri;
+
         if (savedInstanceState == null) {
             full_contacts = new ArrayList<>();
             fillList();
             getContacts();
-        }else{
-            System.out.println("SAVE DATA");
+        } else {
             full_contacts = savedInstanceState.getParcelableArrayList("CONTACTS");
         }
         contacts = new ArrayList<>();
@@ -75,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
 
         FloatingActionButton addButton = findViewById(R.id.addButton);
-        addButton.setOnClickListener(new View.OnClickListener(){
+        addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), AddContactActivity.class);
@@ -85,11 +90,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu){
+    public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
         final MenuItem item = menu.findItem(R.id.searchView);
-        final SearchView searchView = (SearchView)item.getActionView();
+        final SearchView searchView = (SearchView) item.getActionView();
 
         searchView.setQuery(lastQuery, false);
         lastQuery = "";
@@ -129,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void fillList() {
-        Uri uri = Uri.parse("android.resource://"+getPackageName()+"/drawable/ic_person");
+        Uri uri = Uri.parse("android.resource://" + getPackageName() + "/drawable/ic_person");
         full_contacts.add(new Contact("name1", "lastname1", "1", "phone1", "email1", "add1", uri.toString()));
         full_contacts.add(new Contact("name2", "lastname2", "2", "phone2", "email2", "add2", uri.toString()));
         full_contacts.add(new Contact("name3", "lastname3", "3", "phone3", "email3", "add3", uri.toString()));
@@ -151,11 +156,11 @@ public class MainActivity extends AppCompatActivity {
                 String id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
                 String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
 
-                Uri uri = Uri.parse("android.resource://"+getPackageName()+"/drawable/ic_person");
-                Contact contact = new Contact(name, "lastname", id, "phone", "email", "add", uri.toString());
+                Uri defaultUri = Uri.parse("android.resource://" + getPackageName() + "/drawable/ic_person");
+                Contact contact = new Contact(name, "lastname", id, "phone", "email", "add", defaultUri.toString());
                 full_contacts.add(contact);
 
-                // get the phone number
+                //Get phone number
                 if (Integer.parseInt(cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
                     Cursor pCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", new String[]{id}, null);
                     while (pCur.moveToNext()) {
@@ -165,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
                     pCur.close();
                 }
 
-                // get email and type
+                //Get email
                 Cursor emailCur = cr.query(ContactsContract.CommonDataKinds.Email.CONTENT_URI, null, ContactsContract.CommonDataKinds.Email.CONTACT_ID + " = ?", new String[]{id}, null);
                 while (emailCur.moveToNext()) {
                     String email = emailCur.getString(emailCur.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA));
@@ -173,19 +178,51 @@ public class MainActivity extends AppCompatActivity {
                 }
                 emailCur.close();
 
-                //Get Postal Address....
+                //Get address
                 Cursor addrCur = cr.query(ContactsContract.CommonDataKinds.StructuredPostal.CONTENT_URI, null, ContactsContract.Data.CONTACT_ID + " = ?", new String[]{id}, null);
                 while (addrCur.moveToNext()) {
                     String street = addrCur.getString(addrCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredPostal.STREET));
                     String city = addrCur.getString(addrCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredPostal.CITY));
                     String state = addrCur.getString(addrCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredPostal.REGION));
                     String country = addrCur.getString(addrCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredPostal.COUNTRY));
-                    String address = street+" "+city+" "+state+" "+country;
+                    String address = street + " " + city + " " + state + " " + country;
                     contact.setAddress(address);
                 }
                 addrCur.close();
+
+                //Get photo
+                Uri imageUri = getPhotoUri(Long.parseLong(id));
+                if (imageUri == null) {
+                    imageUri = defaultUri;
+                    System.out.println("DEFAULT");
+                }
+                try {
+                    contact.setImageUri(imageUri.toString());
+                }catch (Exception e){
+                    contact.setImageUri(Contact.defaultUri.toString());
+                }
             }
         }
+    }
+
+    public Uri getPhotoUri(long contactId) {
+        ContentResolver contentResolver = getContentResolver();
+        try {
+            Cursor cursor = contentResolver.query(ContactsContract.Data.CONTENT_URI, null, ContactsContract.Data.CONTACT_ID + "=" + contactId + " AND " + ContactsContract.Data.MIMETYPE + "='" + ContactsContract.CommonDataKinds.Photo.CONTENT_ITEM_TYPE + "'", null, null);
+            if (cursor != null) {
+                if (!cursor.moveToFirst()) {
+                    return null;
+                }
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        Uri person = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, contactId);
+        return Uri.withAppendedPath(person, ContactsContract.Contacts.Photo.CONTENT_DIRECTORY);
     }
 
     private void doSearch(String query) {
@@ -200,7 +237,7 @@ public class MainActivity extends AppCompatActivity {
         viewPagerAdapter.notifyDataSetChanged();
     }
 
-    public static void addContact(Contact contact){
+    public static void addContact(Contact contact) {
         full_contacts.add(contact);
         contacts.add(contact);
         viewPagerAdapter.notifyDataSetChanged();

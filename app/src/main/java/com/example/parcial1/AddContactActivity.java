@@ -48,9 +48,7 @@ public class AddContactActivity extends AppCompatActivity{
         }else{
             uri = Uri.parse(savedInstanceState.getString("URI"));
         }
-
         imageView.setImageURI(uri);
-
 
         FloatingActionButton imageButton = findViewById(R.id.add_imageButton);
         imageButton.setOnClickListener(new View.OnClickListener(){

@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class Contact implements Parcelable {
+    public static Uri defaultUri;
     private String name;
     private String lastName;
     private String id;
