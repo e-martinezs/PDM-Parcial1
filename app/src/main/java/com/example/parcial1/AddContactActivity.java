@@ -42,7 +42,15 @@ public class AddContactActivity extends AppCompatActivity{
         RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), bitmap);
         roundedBitmapDrawable.setCircular(true);
         imageView.setImageDrawable(roundedBitmapDrawable);*/
+
+        if (savedInstanceState == null) {
+
+        }else{
+            uri = Uri.parse(savedInstanceState.getString("URI"));
+        }
+
         imageView.setImageURI(uri);
+
 
         FloatingActionButton imageButton = findViewById(R.id.add_imageButton);
         imageButton.setOnClickListener(new View.OnClickListener(){
@@ -103,5 +111,12 @@ public class AddContactActivity extends AppCompatActivity{
                 imageView.setImageDrawable(roundedBitmapDrawable);*/
             }
         }
+    }
+
+    protected void onSaveInstanceState(Bundle bundle) {
+        if (uri != null) {
+            bundle.putString("URI", uri.toString());
+        }
+        super.onSaveInstanceState(bundle);
     }
 }
