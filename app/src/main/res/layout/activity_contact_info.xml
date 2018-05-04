@@ -36,14 +36,11 @@
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
-        <TextView
-            android:id="@+id/info_phoneTextView"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/info_phonesRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:text="Phone"
-            android:textAlignment="center"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+            android:padding="8dp"/>
 
         <TextView
             android:id="@+id/info_emailTextView"

@@ -85,21 +85,33 @@
                 android:inputType="text"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:text="Phone number"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+                android:layout_height="wrap_content">
 
-            <EditText
-                android:id="@+id/add_phoneEditText"
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:layout_weight="2"
+                    android:text="Phone number"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
+                <Button
+                    android:id="@+id/add_numberAddButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:layout_weight="1"
+                    android:text="Add number" />
+            </LinearLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/add_numbersRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:hint="Phone"
-                android:inputType="phone"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                android:padding="8dp">
+            </android.support.v7.widget.RecyclerView>
 
             <TextView
                 android:layout_width="match_parent"
@@ -107,7 +119,6 @@
                 android:layout_margin="4dp"
                 android:text="Email"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large" />
-
 
             <EditText
                 android:id="@+id/add_emailEditText"

@@ -9,6 +9,8 @@ import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +31,6 @@ public class ContactInfoFragment extends Fragment {
         ImageView imageImageView = view.findViewById(R.id.info_imageImageView);
         TextView nameTextView = view.findViewById(R.id.info_nameTextView);
         TextView emailTextView = view.findViewById(R.id.info_emailTextView);
-        TextView phoneTextView = view.findViewById(R.id.info_phoneTextView);
         TextView idTextView = view.findViewById(R.id.info_idTextView);
         TextView addressTextView = view.findViewById(R.id.info_addressTextView);
 
@@ -46,10 +47,16 @@ public class ContactInfoFragment extends Fragment {
             roundedBitmapDrawable.setCircular(true);
             imageImageView.setImageDrawable(roundedBitmapDrawable);
 
+            RecyclerView recyclerView = view.findViewById(R.id.info_phonesRecyclerView);
+            LinearLayoutManager linearManager = new LinearLayoutManager(getContext());
+            recyclerView.setLayoutManager(linearManager);
+            PhoneInfoAdapter adapter = new PhoneInfoAdapter(getContext(), contact.getPhones());
+            recyclerView.setAdapter(adapter);
+            recyclerView.setHasFixedSize(true);
+
             String fullName = contact.getName() + " " + contact.getLastName();
             nameTextView.setText(fullName);
             emailTextView.setText(contact.getEmail());
-            phoneTextView.setText(contact.getPhone());
             idTextView.setText(contact.getId());
             addressTextView.setText(contact.getAddress());
         }

@@ -139,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void fillList() {
-        Uri uri = Uri.parse("android.resource://" + getPackageName() + "/drawable/ic_person");
+        /*Uri uri = Uri.parse("android.resource://" + getPackageName() + "/drawable/ic_person");
         full_contacts.add(new Contact("name1", "lastname1", "1", "phone1", "email1", "add1", uri.toString()));
         full_contacts.add(new Contact("name2", "lastname2", "2", "phone2", "email2", "add2", uri.toString()));
         full_contacts.add(new Contact("name3", "lastname3", "3", "phone3", "email3", "add3", uri.toString()));
@@ -150,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
         full_contacts.add(new Contact("name8", "lastname8", "8", "phone8", "email8", "add8", uri.toString()));
         full_contacts.add(new Contact("name9", "lastname9", "9", "phone9", "email9", "add9", uri.toString()));
         full_contacts.add(new Contact("name10", "lastname10", "10", "phone10", "email10", "add10", uri.toString()));
-        full_contacts.add(new Contact("name11", "lastname11", "11", "phone11", "email11", "add11", uri.toString()));
+        full_contacts.add(new Contact("name11", "lastname11", "11", "phone11", "email11", "add11", uri.toString()));*/
     }
 
     private void checkContactPermission(){
@@ -180,18 +180,19 @@ public class MainActivity extends AppCompatActivity {
                 String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
 
                 Uri defaultUri = Uri.parse("android.resource://" + getPackageName() + "/drawable/ic_person");
-                Contact contact = new Contact(name, "lastname", id, "phone", "email", "add", defaultUri.toString());
+                Contact contact = new Contact(name, "lastname", id, new ArrayList<String>(), "email", "add", defaultUri.toString());
                 full_contacts.add(contact);
 
                 //Get phone number
+                List<String> phones = new ArrayList<>();
                 if (Integer.parseInt(cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
                     Cursor pCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", new String[]{id}, null);
                     while (pCur.moveToNext()) {
-                        String phone = pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-                        contact.setPhone(phone);
+                        phones.add(pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)));
                     }
                     pCur.close();
                 }
+                contact.setPhones(phones);
 
                 //Get email
                 Cursor emailCur = cr.query(ContactsContract.CommonDataKinds.Email.CONTENT_URI, null, ContactsContract.CommonDataKinds.Email.CONTACT_ID + " = ?", new String[]{id}, null);
@@ -234,6 +235,7 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 return null;
             }
+            cursor.close();
         } catch (Exception e) {
             e.printStackTrace();
             return null;

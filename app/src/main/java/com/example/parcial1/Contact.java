@@ -5,7 +5,9 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Contact implements Parcelable {
     public static Uri defaultUri;
@@ -14,16 +16,16 @@ public class Contact implements Parcelable {
     private String id;
     private String email;
     private String address;
-    private String phone;
+    private List<String> phones;
     private String imageUri;
     private Date date;
     private boolean favorite = false;
 
-    public Contact(String name, String lastName, String id, String phone, String email, String address, String imageUri) {
+    public Contact(String name, String lastName, String id, List<String> phones, String email, String address, String imageUri) {
         this.name = name;
         this.lastName = lastName;
         this.id = id;
-        this.phone = phone;
+        this.phones = phones;
         this.email = email;
         this.address = address;
         this.imageUri = imageUri;
@@ -35,7 +37,8 @@ public class Contact implements Parcelable {
         id = in.readString();
         email = in.readString();
         address = in.readString();
-        phone = in.readString();
+        phones = new ArrayList<>();
+        in.readList(phones, null);
         imageUri = in.readString();
         favorite = in.readByte() != 0;
     }
@@ -64,7 +67,7 @@ public class Contact implements Parcelable {
         parcel.writeString(id);
         parcel.writeString(email);
         parcel.writeString(address);
-        parcel.writeString(phone);
+        parcel.writeList(phones);
         parcel.writeString(imageUri);
         parcel.writeByte((byte) (favorite ? 1 : 0));
     }
@@ -125,12 +128,12 @@ public class Contact implements Parcelable {
         this.imageUri = imageUri;
     }
 
-    public String getPhone() {
-        return phone;
+    public List<String> getPhones() {
+        return phones;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void setPhones(List<String> phones) {
+        this.phones = phones;
     }
 
     public Date getDate() {

@@ -2,7 +2,6 @@ package com.example.parcial1;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -10,16 +9,21 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-public class AddContactActivity extends AppCompatActivity{
+import java.util.ArrayList;
+
+public class AddContactActivity extends AppCompatActivity {
 
     public static final int PICK_IMAGE = 1;
-    Uri uri;
-    ImageView imageView;
+    private Uri uri;
+    private ImageView imageView;
+    private ArrayList<String> phones = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,22 +38,25 @@ public class AddContactActivity extends AppCompatActivity{
         final EditText addressEditText = findViewById(R.id.add_addressEditText);
         imageView = findViewById(R.id.add_imageImageView);
 
-        final Uri defaultUri = Uri.parse("android.resource://" + getPackageName() + "/drawable/ic_person");
+        phones = new ArrayList<>();
         if (savedInstanceState == null) {
-            uri = defaultUri;
-        }else{
+            uri = Contact.defaultUri;
+        } else {
             uri = Uri.parse(savedInstanceState.getString("URI"));
+            phones.addAll(savedInstanceState.getStringArrayList("PHONES"));
         }
+
         Bitmap bitmap = null;
         try {
             bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
-        }catch (Exception e){}
+        } catch (Exception e) {
+        }
         RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), bitmap);
         roundedBitmapDrawable.setCircular(true);
         imageView.setImageDrawable(roundedBitmapDrawable);
 
         FloatingActionButton imageButton = findViewById(R.id.add_imageButton);
-        imageButton.setOnClickListener(new View.OnClickListener(){
+        imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -59,26 +66,42 @@ public class AddContactActivity extends AppCompatActivity{
                 pickIntent.setType("image/*");
 
                 Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
-                chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {pickIntent});
+                chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{pickIntent});
 
                 startActivityForResult(chooserIntent, PICK_IMAGE);
             }
         });
 
+        RecyclerView recyclerView = findViewById(R.id.add_numbersRecyclerView);
+        LinearLayoutManager linearManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(linearManager);
+
+        final PhoneEditAdapter adapter = new PhoneEditAdapter(this, phones);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setHasFixedSize(true);
+
+        Button numberAddButton = findViewById(R.id.add_numberAddButton);
+        numberAddButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                phones.add("");
+                adapter.notifyDataSetChanged();
+            }
+        });
+
         Button addButton = findViewById(R.id.add_addButton);
-        addButton.setOnClickListener(new View.OnClickListener(){
+        addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String name = nameEditText.getText().toString();
                 String lastName = lastNameEditText.getText().toString();
                 String id = idEditText.getText().toString();
-                String phone = phoneEditText.getText().toString();
                 String email = emailEditText.getText().toString();
                 String address = addressEditText.getText().toString();
                 if (uri == null) {
-                    uri = defaultUri;
+                    uri = Contact.defaultUri;
                 }
-                Contact contact = new Contact(name, lastName, id, phone, email, address, uri.toString());
+                Contact contact = new Contact(name, lastName, id, phones, email, address, uri.toString());
 
                 MainActivity.addContact(contact);
                 finish();
@@ -90,7 +113,7 @@ public class AddContactActivity extends AppCompatActivity{
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGE) {
-            if(resultCode == RESULT_OK){
+            if (resultCode == RESULT_OK) {
                 Uri selectedImage = data.getData();
                 uri = selectedImage;
                 imageView.setImageURI(selectedImage);
@@ -101,7 +124,8 @@ public class AddContactActivity extends AppCompatActivity{
                 Bitmap bitmap = null;
                 try {
                     bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
-                }catch (Exception e){}
+                } catch (Exception e) {
+                }
                 RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), bitmap);
                 roundedBitmapDrawable.setCircular(true);
                 imageView.setImageDrawable(roundedBitmapDrawable);
@@ -113,6 +137,7 @@ public class AddContactActivity extends AppCompatActivity{
         if (uri != null) {
             bundle.putString("URI", uri.toString());
         }
+        bundle.putStringArrayList("PHONES", phones);
         super.onSaveInstanceState(bundle);
     }
 }
