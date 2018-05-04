@@ -1,10 +1,13 @@
 package com.example.parcial1;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.SearchManager;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -13,8 +16,10 @@ import android.net.Uri;
 import android.provider.ContactsContract;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -47,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             full_contacts = new ArrayList<>();
             //fillList();
-            getContacts();
+            checkContactPermission();
         } else {
             full_contacts = savedInstanceState.getParcelableArrayList("CONTACTS");
         }
@@ -146,6 +151,24 @@ public class MainActivity extends AppCompatActivity {
         full_contacts.add(new Contact("name9", "lastname9", "9", "phone9", "email9", "add9", uri.toString()));
         full_contacts.add(new Contact("name10", "lastname10", "10", "phone10", "email10", "add10", uri.toString()));
         full_contacts.add(new Contact("name11", "lastname11", "11", "phone11", "email11", "add11", uri.toString()));
+    }
+
+    private void checkContactPermission(){
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_CONTACTS}, 1);
+        }else{
+            getContacts();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults){
+        switch (requestCode){
+            case 1:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    getContacts();
+                }
+        }
     }
 
     private void getContacts() {
