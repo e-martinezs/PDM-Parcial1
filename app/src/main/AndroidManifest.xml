@@ -23,6 +23,7 @@
         <activity android:name=".ContactInfoActivity" />
         <activity android:name=".AddContactActivity" />
         <activity android:name=".CallActivity" />
+        <activity android:name=".EditContactActivity"/>
     </application>
 
 </manifest>

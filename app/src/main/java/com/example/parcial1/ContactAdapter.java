@@ -94,14 +94,11 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
                 if (v.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
                     Intent intent = new Intent(context.getApplicationContext(), ContactInfoActivity.class);
                     intent.setAction(Intent.ACTION_SEND);
-                    intent.putExtra("CONTACT", contact);
-                    intent.setType("text/plain");
+                    MainActivity.selectedContact = contact;
                     context.startActivity(intent);
                 }else if(v.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
-                    Bundle bundle = new Bundle();
-                    bundle.putParcelable("CONTACT", contact);
+                    MainActivity.selectedContact = contact;
                     ContactInfoFragment fragment = new ContactInfoFragment();
-                    fragment.setArguments(bundle);
                     FragmentManager fragmentManager = ((AppCompatActivity)context).getSupportFragmentManager();
                     FragmentTransaction transaction = fragmentManager.beginTransaction();
                     transaction.replace(R.id.contactInfoFragment, fragment);

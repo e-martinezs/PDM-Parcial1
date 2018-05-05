@@ -16,12 +16,13 @@ public class Contact implements Parcelable {
     private String id;
     private String email;
     private String address;
-    private List<String> phones;
+    private ArrayList<String> phones;
     private String imageUri;
     private Date date;
+    private boolean toDelete = false;
     private boolean favorite = false;
 
-    public Contact(String name, String lastName, String id, List<String> phones, String email, String address, String imageUri) {
+    public Contact(String name, String lastName, String id, ArrayList<String> phones, String email, String address, String imageUri) {
         this.name = name;
         this.lastName = lastName;
         this.id = id;
@@ -128,11 +129,11 @@ public class Contact implements Parcelable {
         this.imageUri = imageUri;
     }
 
-    public List<String> getPhones() {
+    public ArrayList<String> getPhones() {
         return phones;
     }
 
-    public void setPhones(List<String> phones) {
+    public void setPhones(ArrayList<String> phones) {
         this.phones = phones;
     }
 
@@ -142,5 +143,13 @@ public class Contact implements Parcelable {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public boolean isToDelete() {
+        return toDelete;
+    }
+
+    public void setToDelete(boolean toDelete) {
+        this.toDelete = toDelete;
     }
 }

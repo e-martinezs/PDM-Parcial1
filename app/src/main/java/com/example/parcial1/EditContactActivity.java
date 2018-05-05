@@ -1,11 +1,13 @@
 package com.example.parcial1;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AppCompatActivity;
@@ -18,7 +20,7 @@ import android.widget.ImageView;
 
 import java.util.ArrayList;
 
-public class AddContactActivity extends AppCompatActivity {
+public class EditContactActivity extends AppCompatActivity {
 
     public static final int PICK_IMAGE = 1;
     private Uri uri;
@@ -37,9 +39,17 @@ public class AddContactActivity extends AppCompatActivity {
         final EditText addressEditText = findViewById(R.id.add_addressEditText);
         imageView = findViewById(R.id.add_imageImageView);
 
+        final Contact contact = MainActivity.selectedContact;
         phones = new ArrayList<>();
         if (savedInstanceState == null) {
             uri = Contact.defaultUri;
+            phones = contact.getPhones();
+            uri = Uri.parse(contact.getImageUri());
+            nameEditText.setText(contact.getName());
+            lastNameEditText.setText(contact.getLastName());
+            emailEditText.setText(contact.getEmail());
+            addressEditText.setText(contact.getAddress());
+            idEditText.setText(contact.getId());
         } else {
             uri = Uri.parse(savedInstanceState.getString("URI"));
             phones.addAll(savedInstanceState.getStringArrayList("PHONES"));
@@ -61,7 +71,7 @@ public class AddContactActivity extends AppCompatActivity {
                 Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
                 getIntent.setType("image/*");
 
-                Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                Intent pickIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 pickIntent.setType("image/*");
 
                 Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
@@ -88,8 +98,9 @@ public class AddContactActivity extends AppCompatActivity {
             }
         });
 
-        Button addButton = findViewById(R.id.add_addButton);
-        addButton.setOnClickListener(new View.OnClickListener() {
+        Button editButton = findViewById(R.id.add_addButton);
+        editButton.setText("Save");
+        editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String name = nameEditText.getText().toString();
@@ -100,9 +111,18 @@ public class AddContactActivity extends AppCompatActivity {
                 if (uri == null) {
                     uri = Contact.defaultUri;
                 }
-                Contact contact = new Contact(name, lastName, id, phones, email, address, uri.toString());
+                contact.setName(name);
+                contact.setLastName(lastName);
+                contact.setId(id);
+                contact.setEmail(email);
+                contact.setAddress(address);
+                contact.setImageUri(uri.toString());
+                contact.setPhones(phones);
+                MainActivity.viewPagerAdapter.notifyDataSetChanged();
 
-                MainActivity.addContact(contact);
+                Intent intent = new Intent(getApplicationContext(), ContactInfoActivity.class);
+                startActivity(intent);
+
                 finish();
             }
         });

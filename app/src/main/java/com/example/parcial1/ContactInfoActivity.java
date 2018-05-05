@@ -14,10 +14,12 @@ import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class ContactInfoActivity extends AppCompatActivity{
+public class ContactInfoActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,11 +32,8 @@ public class ContactInfoActivity extends AppCompatActivity{
         TextView idTextView = findViewById(R.id.info_idTextView);
         TextView addressTextView = findViewById(R.id.info_addressTextView);
 
-        Intent intent = getIntent();
-        Contact contact = intent.getParcelableExtra("CONTACT");
-
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
-            MainActivity.selectedContact = contact;
+        final Contact contact = MainActivity.selectedContact;
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             finish();
         }
 
@@ -42,7 +41,8 @@ public class ContactInfoActivity extends AppCompatActivity{
         Bitmap bitmap = null;
         try {
             bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
-        }catch (Exception e){}
+        } catch (Exception e) {
+        }
         RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), bitmap);
         roundedBitmapDrawable.setCircular(true);
         imageImageView.setImageDrawable(roundedBitmapDrawable);
@@ -54,10 +54,30 @@ public class ContactInfoActivity extends AppCompatActivity{
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
 
-        String fullName = contact.getName()+" "+contact.getLastName();
+        String fullName = contact.getName() + " " + contact.getLastName();
         nameTextView.setText(fullName);
         emailTextView.setText(contact.getEmail());
         idTextView.setText(contact.getId());
         addressTextView.setText(contact.getAddress());
+
+        Button editButton = findViewById(R.id.info_editButton);
+        editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), EditContactActivity.class);
+                intent.setAction(Intent.ACTION_SEND);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+        Button deleteButton = findViewById(R.id.info_deleteButton);
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MainActivity.deleteContact();
+                finish();
+            }
+        });
     }
 }

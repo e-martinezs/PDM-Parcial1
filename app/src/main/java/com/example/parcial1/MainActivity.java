@@ -1,17 +1,12 @@
 package com.example.parcial1;
 
 import android.Manifest;
-import android.app.Activity;
-import android.app.SearchManager;
 import android.content.ContentResolver;
 import android.content.ContentUris;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.ContactsContract;
 import android.support.design.widget.FloatingActionButton;
@@ -27,10 +22,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.SearchView;
 
-import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
 
         if (savedInstanceState == null) {
             full_contacts = new ArrayList<>();
-            //fillList();
             checkContactPermission();
         } else {
             full_contacts = savedInstanceState.getParcelableArrayList("CONTACTS");
@@ -61,16 +53,11 @@ public class MainActivity extends AppCompatActivity {
 
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             if (selectedContact != null) {
-                Bundle bundle = new Bundle();
-                bundle.putParcelable("CONTACT", selectedContact);
                 ContactInfoFragment fragment = new ContactInfoFragment();
-                fragment.setArguments(bundle);
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.contactInfoFragment, fragment);
                 transaction.commit();
-
-                selectedContact = null;
             }
         }
 
@@ -97,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu, menu);
+        inflater.inflate(R.menu.menu_search, menu);
         final MenuItem item = menu.findItem(R.id.searchView);
         final SearchView searchView = (SearchView) item.getActionView();
 
@@ -133,24 +120,10 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
     protected void onSaveInstanceState(Bundle bundle) {
         bundle.putParcelableArrayList("CONTACTS", contacts);
         super.onSaveInstanceState(bundle);
-    }
-
-    private void fillList() {
-        /*Uri uri = Uri.parse("android.resource://" + getPackageName() + "/drawable/ic_person");
-        full_contacts.add(new Contact("name1", "lastname1", "1", "phone1", "email1", "add1", uri.toString()));
-        full_contacts.add(new Contact("name2", "lastname2", "2", "phone2", "email2", "add2", uri.toString()));
-        full_contacts.add(new Contact("name3", "lastname3", "3", "phone3", "email3", "add3", uri.toString()));
-        full_contacts.add(new Contact("name4", "lastname4", "4", "phone4", "email4", "add4", uri.toString()));
-        full_contacts.add(new Contact("name5", "lastname5", "5", "phone5", "email5", "add5", uri.toString()));
-        full_contacts.add(new Contact("name6", "lastname6", "6", "phone6", "email6", "add6", uri.toString()));
-        full_contacts.add(new Contact("name7", "lastname7", "7", "phone7", "email7", "add7", uri.toString()));
-        full_contacts.add(new Contact("name8", "lastname8", "8", "phone8", "email8", "add8", uri.toString()));
-        full_contacts.add(new Contact("name9", "lastname9", "9", "phone9", "email9", "add9", uri.toString()));
-        full_contacts.add(new Contact("name10", "lastname10", "10", "phone10", "email10", "add10", uri.toString()));
-        full_contacts.add(new Contact("name11", "lastname11", "11", "phone11", "email11", "add11", uri.toString()));*/
     }
 
     private void checkContactPermission(){
@@ -184,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
                 full_contacts.add(contact);
 
                 //Get phone number
-                List<String> phones = new ArrayList<>();
+                ArrayList<String> phones = new ArrayList<>();
                 if (Integer.parseInt(cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
                     Cursor pCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", new String[]{id}, null);
                     while (pCur.moveToNext()) {
@@ -260,6 +233,13 @@ public class MainActivity extends AppCompatActivity {
     public static void addContact(Contact contact) {
         full_contacts.add(contact);
         contacts.add(contact);
+        viewPagerAdapter.notifyDataSetChanged();
+    }
+
+    public static void deleteContact(){
+        full_contacts.remove(selectedContact);
+        contacts.remove(selectedContact);
+        selectedContact = null;
         viewPagerAdapter.notifyDataSetChanged();
     }
 
