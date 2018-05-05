@@ -60,6 +60,21 @@ public class ContactInfoActivity extends AppCompatActivity {
         idTextView.setText(contact.getId());
         addressTextView.setText(contact.getAddress());
 
+        Button shareButton = findViewById(R.id.info_shareButton);
+        shareButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                String text = "Name: "+contact.getName()+" "+contact.getLastName()+"\n"+"Email: "+contact.getEmail()+"\n"+"Address: "+contact.getAddress()+"\nPhone numbers: ";
+                for (String s:contact.getPhones()){
+                    text = text.concat("\n "+s);
+                }
+                intent.putExtra(Intent.EXTRA_TEXT, text);
+                intent.setType("text/plain");
+                startActivity(Intent.createChooser(intent, "Share"));
+            }
+        });
+
         Button editButton = findViewById(R.id.info_editButton);
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override

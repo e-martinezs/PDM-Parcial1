@@ -31,6 +31,7 @@ public class ContactInfoFragment extends Fragment {
     TextView idTextView;
     TextView addressTextView;
     RecyclerView recyclerView;
+    Contact contact;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,34 +49,22 @@ public class ContactInfoFragment extends Fragment {
         addressTextView = view.findViewById(R.id.info_addressTextView);
         recyclerView = view.findViewById(R.id.info_phonesRecyclerView);
 
-        //Bundle bundle = this.getArguments();
-        if (MainActivity.selectedContact != null) {
-            //Contact contact = bundle.getParcelable("CONTACT");
-            Contact contact = MainActivity.selectedContact;
+        loadContactData();
 
-            Uri imageUri = Uri.parse(contact.getImageUri());
-            Bitmap bitmap = null;
-            try {
-                bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), imageUri);
-            } catch (Exception e) {
+        Button shareButton = view.findViewById(R.id.info_shareButton);
+        shareButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                String text = "Name: "+contact.getName()+" "+contact.getLastName()+"\n"+"Email: "+contact.getEmail()+"\n"+"Address: "+contact.getAddress()+"\nPhone numbers: ";
+                for (String s:contact.getPhones()){
+                    text = text.concat("\n "+s);
+                }
+                intent.putExtra(Intent.EXTRA_TEXT, text);
+                intent.setType("text/plain");
+                startActivity(Intent.createChooser(intent, "Share"));
             }
-            RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), bitmap);
-            roundedBitmapDrawable.setCircular(true);
-            imageImageView.setImageDrawable(roundedBitmapDrawable);
-
-            RecyclerView recyclerView = view.findViewById(R.id.info_phonesRecyclerView);
-            LinearLayoutManager linearManager = new LinearLayoutManager(getContext());
-            recyclerView.setLayoutManager(linearManager);
-            PhoneInfoAdapter adapter = new PhoneInfoAdapter(getContext(), contact.getPhones());
-            recyclerView.setAdapter(adapter);
-            recyclerView.setHasFixedSize(true);
-
-            String fullName = contact.getName() + " " + contact.getLastName();
-            nameTextView.setText(fullName);
-            emailTextView.setText(contact.getEmail());
-            idTextView.setText(contact.getId());
-            addressTextView.setText(contact.getAddress());
-        }
+        });
 
         Button editButton = view.findViewById(R.id.info_editButton);
         editButton.setOnClickListener(new View.OnClickListener() {
@@ -105,9 +94,12 @@ public class ContactInfoFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        loadContactData();
+    }
+
+    private void loadContactData(){
         if (MainActivity.selectedContact != null) {
-            //Contact contact = bundle.getParcelable("CONTACT");
-            Contact contact = MainActivity.selectedContact;
+            contact = MainActivity.selectedContact;
 
             Uri imageUri = Uri.parse(contact.getImageUri());
             Bitmap bitmap = null;
