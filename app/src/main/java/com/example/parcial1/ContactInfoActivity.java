@@ -38,14 +38,7 @@ public class ContactInfoActivity extends AppCompatActivity {
         }
 
         Uri imageUri = Uri.parse(contact.getImageUri());
-        Bitmap bitmap = null;
-        try {
-            bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
-        } catch (Exception e) {
-        }
-        RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), bitmap);
-        roundedBitmapDrawable.setCircular(true);
-        imageImageView.setImageDrawable(roundedBitmapDrawable);
+        ImageHandler.loadImage(this, imageImageView, imageUri);
 
         RecyclerView recyclerView = findViewById(R.id.info_phonesRecyclerView);
         LinearLayoutManager linearManager = new LinearLayoutManager(this);

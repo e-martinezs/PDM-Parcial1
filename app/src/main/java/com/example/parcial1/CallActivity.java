@@ -24,7 +24,7 @@ public class CallActivity extends AppCompatActivity {
     }
 
     private void makeCall(){
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CALL_PHONE}, 1);
         } else {
             Intent intent = new Intent(Intent.ACTION_CALL);

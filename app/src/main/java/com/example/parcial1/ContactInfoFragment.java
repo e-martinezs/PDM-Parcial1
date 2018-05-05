@@ -102,14 +102,7 @@ public class ContactInfoFragment extends Fragment {
             contact = MainActivity.selectedContact;
 
             Uri imageUri = Uri.parse(contact.getImageUri());
-            Bitmap bitmap = null;
-            try {
-                bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), imageUri);
-            } catch (Exception e) {
-            }
-            RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), bitmap);
-            roundedBitmapDrawable.setCircular(true);
-            imageImageView.setImageDrawable(roundedBitmapDrawable);
+            ImageHandler.loadImage(getContext(), imageImageView, imageUri);
 
             LinearLayoutManager linearManager = new LinearLayoutManager(getContext());
             recyclerView.setLayoutManager(linearManager);

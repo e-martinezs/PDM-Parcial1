@@ -63,14 +63,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
         holder.nameTextView.setText(fullName);
 
         Uri imageUri = Uri.parse(contact.getImageUri());
-        Bitmap bitmap = null;
-        try {
-            bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), imageUri);
-        } catch (Exception e) {
-        }
-        RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(context.getResources(), bitmap);
-        roundedBitmapDrawable.setCircular(true);
-        holder.imageImageView.setImageDrawable(roundedBitmapDrawable);
+        ImageHandler.loadImage(context, holder.imageImageView, imageUri);
 
         if (contact.isFavorite()) {
             holder.favoriteButton.setChecked(true);
