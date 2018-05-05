@@ -262,4 +262,9 @@ public class MainActivity extends AppCompatActivity {
         contacts.add(contact);
         viewPagerAdapter.notifyDataSetChanged();
     }
+
+    @Override
+    public void onBackPressed() {
+        moveTaskToBack(true);
+    }
 }
