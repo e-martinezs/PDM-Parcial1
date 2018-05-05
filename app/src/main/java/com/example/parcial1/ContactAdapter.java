@@ -18,7 +18,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -39,7 +41,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
                 }
             }
         } else {
-            for (Contact contact : MainActivity.contacts){
+            for (Contact contact : MainActivity.contacts) {
                 contacts.add(contact);
             }
         }
@@ -64,21 +66,22 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
         Bitmap bitmap = null;
         try {
             bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), imageUri);
-        }catch (Exception e){}
+        } catch (Exception e) {
+        }
         RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(context.getResources(), bitmap);
         roundedBitmapDrawable.setCircular(true);
         holder.imageImageView.setImageDrawable(roundedBitmapDrawable);
 
         if (contact.isFavorite()) {
-            holder.favoriteCheckbox.setChecked(true);
+            holder.favoriteButton.setChecked(true);
         } else {
-            holder.favoriteCheckbox.setChecked(false);
+            holder.favoriteButton.setChecked(false);
         }
 
-        holder.favoriteCheckbox.setOnClickListener(new View.OnClickListener() {
+        holder.favoriteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (holder.favoriteCheckbox.isChecked()) {
+                if (holder.favoriteButton.isChecked()) {
                     contacts.get(holder.getAdapterPosition()).setFavorite(true);
                     MainActivity.viewPagerAdapter.notifyDataSetChanged();
                 } else {
@@ -88,18 +91,18 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
             }
         });
 
-        holder.cardView.setOnClickListener(new View.OnClickListener(){
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v){
+            public void onClick(View v) {
                 if (v.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
                     Intent intent = new Intent(context.getApplicationContext(), ContactInfoActivity.class);
                     intent.setAction(Intent.ACTION_SEND);
                     MainActivity.selectedContact = contact;
                     context.startActivity(intent);
-                }else if(v.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+                } else if (v.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
                     MainActivity.selectedContact = contact;
                     ContactInfoFragment fragment = new ContactInfoFragment();
-                    FragmentManager fragmentManager = ((AppCompatActivity)context).getSupportFragmentManager();
+                    FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
                     FragmentTransaction transaction = fragmentManager.beginTransaction();
                     transaction.replace(R.id.contactInfoFragment, fragment);
                     transaction.commit();
@@ -117,14 +120,14 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
         private CardView cardView;
         private ImageView imageImageView;
         private TextView nameTextView;
-        private CheckBox favoriteCheckbox;
+        private CheckBox favoriteButton;
 
         public ContactViewHolder(View view) {
             super(view);
             cardView = view.findViewById(R.id.cardView);
             imageImageView = view.findViewById(R.id.card_imageImageView);
             nameTextView = view.findViewById(R.id.card_nameTextView);
-            favoriteCheckbox = view.findViewById(R.id.card_favoriteCheckbox);
+            favoriteButton = view.findViewById(R.id.card_favoriteButton);
         }
     }
 }

@@ -100,6 +100,12 @@ public class AddContactActivity extends AppCompatActivity {
                 if (uri == null) {
                     uri = Contact.defaultUri;
                 }
+                for (int i=0; i<phones.size(); i++){
+                    String s = phones.get(i);
+                    if (s.isEmpty()){
+                        phones.remove(i);
+                    }
+                }
                 Contact contact = new Contact(name, lastName, id, phones, email, address, uri.toString());
 
                 MainActivity.addContact(contact);

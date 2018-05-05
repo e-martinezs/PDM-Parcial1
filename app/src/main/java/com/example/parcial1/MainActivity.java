@@ -153,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
                 String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
 
                 Uri defaultUri = Uri.parse("android.resource://" + getPackageName() + "/drawable/ic_person");
-                Contact contact = new Contact(name, "lastname", id, new ArrayList<String>(), "email", "add", defaultUri.toString());
+                Contact contact = new Contact(name, "", id, new ArrayList<String>(), "", "", defaultUri.toString());
                 full_contacts.add(contact);
 
                 //Get phone number
