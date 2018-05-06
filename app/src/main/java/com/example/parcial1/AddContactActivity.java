@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +17,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -68,7 +70,7 @@ public class AddContactActivity extends AppCompatActivity implements DatePickerD
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
 
-        Button numberAddButton = findViewById(R.id.add_numberAddButton);
+        ImageButton numberAddButton = findViewById(R.id.add_numberAddButton);
         numberAddButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -78,7 +80,7 @@ public class AddContactActivity extends AppCompatActivity implements DatePickerD
         });
 
         final DatePickerFragment dialog = new DatePickerFragment();
-        Button dateButton = findViewById(R.id.add_dateButton);
+        ImageButton dateButton = findViewById(R.id.add_dateButton);
         dateButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
@@ -96,19 +98,25 @@ public class AddContactActivity extends AppCompatActivity implements DatePickerD
                 String email = emailEditText.getText().toString();
                 String address = addressEditText.getText().toString();
                 String date = dateTextView.getText().toString();
-                if (uri == null) {
-                    uri = Contact.defaultUri;
-                }
-                for (int i=0; i<phones.size(); i++){
-                    String s = phones.get(i);
-                    if (s.isEmpty()){
-                        phones.remove(i);
-                    }
-                }
-                Contact contact = new Contact(name, lastName, id, phones, email, address, date, uri.toString());
 
-                MainActivity.addContact(contact);
-                finish();
+                if (name.equals("")){
+                    Snackbar snackbar = Snackbar.make(view, "Contact must have a name", Snackbar.LENGTH_SHORT);
+                    snackbar.show();
+                }else {
+                    if (uri == null) {
+                        uri = Contact.defaultUri;
+                    }
+                    for (int i = 0; i < phones.size(); i++) {
+                        String s = phones.get(i);
+                        if (s.isEmpty()) {
+                            phones.remove(i);
+                        }
+                    }
+                    Contact contact = new Contact(name, lastName, id, phones, email, address, date, uri.toString());
+                    MainActivity.selectedContact = contact;
+                    MainActivity.addContact(contact);
+                    finish();
+                }
             }
         });
     }

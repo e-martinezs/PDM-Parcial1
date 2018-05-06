@@ -58,8 +58,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
     @Override
     public void onBindViewHolder(final ContactViewHolder holder, int position) {
         final Contact contact = contacts.get(position);
-        //String fullName = contact.getName() + " " + contact.getLastName();
-        String fullName = contact.getName();
+        String fullName = contact.getName() + " " + contact.getLastName();
         holder.nameTextView.setText(fullName);
 
         Uri imageUri = Uri.parse(contact.getImageUri());

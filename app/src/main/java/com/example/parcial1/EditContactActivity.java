@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
@@ -22,12 +23,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class EditContactActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
+public class EditContactActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
     public static final int PICK_IMAGE = 1;
     private Uri uri;
@@ -70,7 +72,7 @@ public class EditContactActivity extends AppCompatActivity implements DatePicker
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               getImage();
+                getImage();
             }
         });
 
@@ -82,7 +84,7 @@ public class EditContactActivity extends AppCompatActivity implements DatePicker
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
 
-        Button numberAddButton = findViewById(R.id.add_numberAddButton);
+        ImageButton numberAddButton = findViewById(R.id.add_numberAddButton);
         numberAddButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -92,8 +94,8 @@ public class EditContactActivity extends AppCompatActivity implements DatePicker
         });
 
         final DatePickerFragment dialog = new DatePickerFragment();
-        final Button dateButton = findViewById(R.id.add_dateButton);
-        dateButton.setOnClickListener(new View.OnClickListener(){
+        final ImageButton dateButton = findViewById(R.id.add_dateButton);
+        dateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 dialog.show(getSupportFragmentManager(), "datePicker");
@@ -111,34 +113,40 @@ public class EditContactActivity extends AppCompatActivity implements DatePicker
                 String email = emailEditText.getText().toString();
                 String address = addressEditText.getText().toString();
                 String date = dateTextView.getText().toString();
-                if (uri == null) {
-                    uri = Contact.defaultUri;
-                }
-                for (int i=0; i<phones.size(); i++){
-                    String s = phones.get(i);
-                    if (s.isEmpty()){
-                        phones.remove(i);
+
+                if (name.equals("")) {
+                    Snackbar snackbar = Snackbar.make(view, "Contact must have a name", Snackbar.LENGTH_SHORT);
+                    snackbar.show();
+                } else {
+                    if (uri == null) {
+                        uri = Contact.defaultUri;
                     }
+                    for (int i = 0; i < phones.size(); i++) {
+                        String s = phones.get(i);
+                        if (s.isEmpty()) {
+                            phones.remove(i);
+                        }
+                    }
+                    contact.setName(name);
+                    contact.setLastName(lastName);
+                    contact.setId(id);
+                    contact.setEmail(email);
+                    contact.setAddress(address);
+                    contact.setImageUri(uri.toString());
+                    contact.setPhones(phones);
+                    contact.setDate(date);
+                    MainActivity.viewPagerAdapter.notifyDataSetChanged();
+
+                    Intent intent = new Intent(getApplicationContext(), ContactInfoActivity.class);
+                    startActivity(intent);
+
+                    finish();
                 }
-                contact.setName(name);
-                contact.setLastName(lastName);
-                contact.setId(id);
-                contact.setEmail(email);
-                contact.setAddress(address);
-                contact.setImageUri(uri.toString());
-                contact.setPhones(phones);
-                contact.setDate(date);
-                MainActivity.viewPagerAdapter.notifyDataSetChanged();
-
-                Intent intent = new Intent(getApplicationContext(), ContactInfoActivity.class);
-                startActivity(intent);
-
-                finish();
             }
         });
     }
 
-    private void getImage(){
+    private void getImage() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
         } else {
@@ -184,7 +192,7 @@ public class EditContactActivity extends AppCompatActivity implements DatePicker
 
     @Override
     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-        String date = year+"-"+month+"-"+day;
+        String date = year + "-" + month + "-" + day;
         dateTextView.setText(date);
     }
 }

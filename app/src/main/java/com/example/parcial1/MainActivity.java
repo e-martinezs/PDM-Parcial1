@@ -52,6 +52,9 @@ public class MainActivity extends AppCompatActivity {
         contacts.addAll(full_contacts);
 
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            if (selectedContact == null && contacts.size() > 0){
+                selectedContact = contacts.get(0);
+            }
             if (selectedContact != null) {
                 ContactInfoFragment fragment = new ContactInfoFragment();
                 FragmentManager fragmentManager = getSupportFragmentManager();
@@ -89,6 +92,10 @@ public class MainActivity extends AppCompatActivity {
         final SearchView searchView = (SearchView) item.getActionView();
 
         searchView.setQuery(lastQuery, false);
+        if (!lastQuery.equals("")){
+            contacts = new ArrayList<>();
+            doSearch(lastQuery);
+        }
         lastQuery = "";
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -122,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onSaveInstanceState(Bundle bundle) {
-        bundle.putParcelableArrayList("CONTACTS", contacts);
+        bundle.putParcelableArrayList("CONTACTS", full_contacts);
         super.onSaveInstanceState(bundle);
     }
 
@@ -188,52 +195,24 @@ public class MainActivity extends AppCompatActivity {
                 addrCur.close();
 
                 //Get photo
-                Uri imageUri = getPhotoUri(Long.parseLong(id));
-                if (imageUri == null) {
-                    imageUri = defaultUri;
+                Cursor phCur = cr.query(ContactsContract.Data.CONTENT_URI, null, ContactsContract.Data.CONTACT_ID + "= ? AND " + ContactsContract.Data.MIMETYPE + "='" + ContactsContract.CommonDataKinds.Photo.CONTENT_ITEM_TYPE + "'", new String[]{id}, null);
+                while (phCur.moveToNext()){
+                    Uri person = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, Long.parseLong(id));
+                    Uri imageUri = Uri.withAppendedPath(person, ContactsContract.Contacts.Photo.CONTENT_DIRECTORY);
+                    contact.setImageUri(imageUri.toString());
                 }
-                contact.setImageUri(imageUri.toString());
+                phCur.close();
 
                 //Get birthday
-                Cursor bdcur = getContactsBirthdays();
-                int bDayColumn = bdcur.getColumnIndex(ContactsContract.CommonDataKinds.Event.START_DATE);
-                String bDay = "";
-                while (bdcur.moveToNext()) {
-                    bDay = bdcur.getString(bDayColumn);
+                Cursor bCur = cr.query(ContactsContract.Data.CONTENT_URI, null, ContactsContract.Data.CONTACT_ID + "= ? AND " + ContactsContract.Data.MIMETYPE + "='" + ContactsContract.CommonDataKinds.Event.CONTENT_ITEM_TYPE + "' AND " + ContactsContract.CommonDataKinds.Event.TYPE + "=" + ContactsContract.CommonDataKinds.Event.TYPE_BIRTHDAY, new String[]{id}, null);
+                while (bCur.moveToNext()) {
+                    String date = bCur.getString(bCur.getColumnIndex(ContactsContract.CommonDataKinds.Event.START_DATE));
+                    contact.setDate(date);
                 }
-                contact.setDate(bDay);
+                bCur.close();
             }
-        }
-    }
-
-    public Uri getPhotoUri(long contactId) {
-        ContentResolver contentResolver = getContentResolver();
-        Cursor cursor;
-        try {
-            cursor = contentResolver.query(ContactsContract.Data.CONTENT_URI, null, ContactsContract.Data.CONTACT_ID + "=" + contactId + " AND " + ContactsContract.Data.MIMETYPE + "='" + ContactsContract.CommonDataKinds.Photo.CONTENT_ITEM_TYPE + "'", null, null);
-            if (cursor != null) {
-                if (!cursor.moveToFirst()) {
-                    return null;
-                }
-            } else {
-                return null;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
         }
         cursor.close();
-        Uri person = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, contactId);
-        return Uri.withAppendedPath(person, ContactsContract.Contacts.Photo.CONTENT_DIRECTORY);
-    }
-
-    private Cursor getContactsBirthdays() {
-        Uri uri = ContactsContract.Data.CONTENT_URI;
-        String[] projection = new String[] {ContactsContract.Contacts.DISPLAY_NAME, ContactsContract.CommonDataKinds.Event.CONTACT_ID, ContactsContract.CommonDataKinds.Event.START_DATE};
-        String where = ContactsContract.Data.MIMETYPE + "= ? AND " + ContactsContract.CommonDataKinds.Event.TYPE + "=" + ContactsContract.CommonDataKinds.Event.TYPE_BIRTHDAY;
-        String[] selectionArgs = new String[] {ContactsContract.CommonDataKinds.Event.CONTENT_ITEM_TYPE};
-        String sortOrder = null;
-        return managedQuery(uri, projection, where, selectionArgs, sortOrder);
     }
 
     private void doSearch(String query) {

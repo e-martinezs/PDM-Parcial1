@@ -100,13 +100,16 @@
                     android:text="Phone number"
                     android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
-                <Button
+                <ImageButton
                     android:id="@+id/add_numberAddButton"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:layout_gravity="center_vertical"
                     android:layout_margin="8dp"
-                    android:background="@drawable/ic_add" />
+                    android:background="@color/colorAccent"
+                    android:elevation="2dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_add" />
             </LinearLayout>
 
             <android.support.v7.widget.RecyclerView
@@ -160,21 +163,25 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <TextView
+                <EditText
                     android:id="@+id/add_dateTextView"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:layout_weight="3"
-                    android:hint="YYYY-MM-DD"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
-
-                <Button
-                    android:id="@+id/add_dateButton"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_margin="8dp"
+                    android:hint="YYYY-MM-DD"
+                    android:focusable="false"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+                <ImageButton
+                    android:id="@+id/add_dateButton"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_margin="8dp"
+                    android:background="@color/colorAccent"
+                    android:elevation="2dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_calendar"
                     android:text="Set" />
             </LinearLayout>
 
@@ -184,6 +191,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="8dp"
+                android:background="@color/colorAccent"
                 android:elevation="2dp"
                 android:text="Add" />
         </LinearLayout>

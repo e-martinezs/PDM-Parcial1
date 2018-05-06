@@ -1,5 +1,6 @@
 package com.example.parcial1;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -19,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -53,7 +56,7 @@ public class ContactInfoFragment extends Fragment {
 
         loadContactData();
 
-        Button shareButton = view.findViewById(R.id.info_shareButton);
+        ImageButton shareButton = view.findViewById(R.id.info_shareButton);
         shareButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
@@ -68,7 +71,7 @@ public class ContactInfoFragment extends Fragment {
             }
         });
 
-        Button editButton = view.findViewById(R.id.info_editButton);
+        ImageButton editButton = view.findViewById(R.id.info_editButton);
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -78,15 +81,11 @@ public class ContactInfoFragment extends Fragment {
             }
         });
 
-        Button deleteButton = view.findViewById(R.id.info_deleteButton);
-        final Fragment fragment = this;
+        ImageButton deleteButton = view.findViewById(R.id.info_deleteButton);
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MainActivity.deleteContact();
-                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                transaction.remove(fragment);
-                transaction.commit();
+                showDialogBox();
             }
         });
 
@@ -119,5 +118,29 @@ public class ContactInfoFragment extends Fragment {
             addressTextView.setText(contact.getAddress());
             dateTextView.setText(contact.getDate());
         }
+    }
+
+    private void showDialogBox(){
+        final Fragment fragment = this;
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int option) {
+                switch (option){
+                    case DialogInterface.BUTTON_POSITIVE:
+                        MainActivity.deleteContact();
+                        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                        transaction.remove(fragment);
+                        transaction.commit();
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        dialog.cancel();
+                        break;
+                }
+            }
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setMessage("Are you sure?").setPositiveButton("Yes", dialogClickListener).setNegativeButton("No", dialogClickListener).show();
     }
 }

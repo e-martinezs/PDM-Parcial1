@@ -1,5 +1,6 @@
 package com.example.parcial1;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -11,11 +12,13 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -55,7 +58,7 @@ public class ContactInfoActivity extends AppCompatActivity {
         addressTextView.setText(contact.getAddress());
         dateTextView.setText(contact.getDate());
 
-        Button shareButton = findViewById(R.id.info_shareButton);
+        ImageButton shareButton = findViewById(R.id.info_shareButton);
         shareButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
@@ -70,7 +73,7 @@ public class ContactInfoActivity extends AppCompatActivity {
             }
         });
 
-        Button editButton = findViewById(R.id.info_editButton);
+        ImageButton editButton = findViewById(R.id.info_editButton);
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -81,13 +84,33 @@ public class ContactInfoActivity extends AppCompatActivity {
             }
         });
 
-        Button deleteButton = findViewById(R.id.info_deleteButton);
+        ImageButton deleteButton = findViewById(R.id.info_deleteButton);
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MainActivity.deleteContact();
-                finish();
+                showDialogBox();
             }
         });
+    }
+
+    private void showDialogBox(){
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int option) {
+                switch (option){
+                    case DialogInterface.BUTTON_POSITIVE:
+                        MainActivity.deleteContact();
+                        finish();
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        dialog.cancel();
+                        break;
+                }
+            }
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Are you sure?").setPositiveButton("Yes", dialogClickListener).setNegativeButton("No", dialogClickListener).show();
     }
 }
