@@ -1,4 +1,4 @@
-package com.example.parcial1;
+package com.example.parcial1.fragments;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -7,11 +7,11 @@ import android.os.Bundle;
 
 import java.util.Calendar;
 
-public class DatePickerFragment extends DialogFragment{
+public class DatePickerFragment extends DialogFragment {
 
-
+    //Genera un dialogo para seleccionar una fecha
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState){
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
         final Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);

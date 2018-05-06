@@ -1,4 +1,4 @@
-package com.example.parcial1;
+package com.example.parcial1.adapters;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -36,6 +36,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
         return tabTitles.get(position);
     }
 
+    //Agrega un nuevo fragmento al view pager y su titulo a la tab correspondiente
     public void addFragment(Fragment fragment, String title) {
         fragments.add(fragment);
         tabTitles.add(title);

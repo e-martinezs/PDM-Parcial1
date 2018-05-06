@@ -1,30 +1,27 @@
-package com.example.parcial1;
+package com.example.parcial1.fragments;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.SearchView;
 import android.widget.TextView;
+
+import com.example.parcial1.model.Contact;
+import com.example.parcial1.tools.ImageHandler;
+import com.example.parcial1.adapters.PhoneInfoAdapter;
+import com.example.parcial1.R;
+import com.example.parcial1.activities.EditContactActivity;
+import com.example.parcial1.activities.MainActivity;
 
 public class ContactInfoFragment extends Fragment {
 
@@ -57,17 +54,10 @@ public class ContactInfoFragment extends Fragment {
         loadContactData();
 
         ImageButton shareButton = view.findViewById(R.id.info_shareButton);
-        shareButton.setOnClickListener(new View.OnClickListener(){
+        shareButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_SEND);
-                String text = "Name: "+contact.getName()+" "+contact.getLastName()+"\n"+"Email: "+contact.getEmail()+"\n"+"Address: "+contact.getAddress()+"\nPhone numbers: ";
-                for (String s:contact.getPhones()){
-                    text = text.concat("\n "+s);
-                }
-                intent.putExtra(Intent.EXTRA_TEXT, text);
-                intent.setType("text/plain");
-                startActivity(Intent.createChooser(intent, "Share"));
+                shareData();
             }
         });
 
@@ -92,13 +82,15 @@ public class ContactInfoFragment extends Fragment {
         return view;
     }
 
+    //Al reiniciar actualiza los datos
     @Override
     public void onResume() {
         super.onResume();
         loadContactData();
     }
 
-    private void loadContactData(){
+    //Obtiene los datos del contacto seleccionado
+    private void loadContactData() {
         if (MainActivity.selectedContact != null) {
             contact = MainActivity.selectedContact;
 
@@ -120,12 +112,35 @@ public class ContactInfoFragment extends Fragment {
         }
     }
 
-    private void showDialogBox(){
+    //Crea un intent para compartir la informacion del contacto
+    private void shareData() {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        String text = "Name: " + contact.getName() + " " + contact.getLastName();
+        if (!contact.getEmail().equals("")) {
+            text = text.concat("\nEmail: " + contact.getEmail());
+        }
+        if (!contact.getAddress().equals("")) {
+            text = text.concat("\nAddress: " + contact.getAddress());
+        }
+        if (!contact.getDate().equals("")) {
+            text = text.concat("\nBirthday: " + contact.getDate());
+        }
+        text = text.concat("\nPhone numbers: ");
+        for (String s : contact.getPhones()) {
+            text = text.concat("\n " + s);
+        }
+        intent.putExtra(Intent.EXTRA_TEXT, text);
+        intent.setType("text/plain");
+        startActivity(Intent.createChooser(intent, "Share"));
+    }
+
+    //Muestra una dialogo para asegurarse que no se apreto el boton borrar por error
+    private void showDialogBox() {
         final Fragment fragment = this;
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int option) {
-                switch (option){
+                switch (option) {
                     case DialogInterface.BUTTON_POSITIVE:
                         MainActivity.deleteContact();
                         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();

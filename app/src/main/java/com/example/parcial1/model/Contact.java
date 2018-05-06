@@ -1,14 +1,10 @@
-package com.example.parcial1;
+package com.example.parcial1.model;
 
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 
 public class Contact implements Parcelable {
     public static Uri defaultUri;

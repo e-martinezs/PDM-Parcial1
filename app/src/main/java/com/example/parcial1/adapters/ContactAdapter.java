@@ -1,38 +1,39 @@
-package com.example.parcial1;
+package com.example.parcial1.adapters;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.example.parcial1.model.Contact;
+import com.example.parcial1.tools.ImageHandler;
+import com.example.parcial1.R;
+import com.example.parcial1.activities.ContactInfoActivity;
+import com.example.parcial1.activities.MainActivity;
+import com.example.parcial1.fragments.ContactInfoFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactViewHolder> {
-    private List<Contact> contacts = new ArrayList<>();
+    private List<Contact> contacts;
     private Context context;
 
     public ContactAdapter(Context context, boolean favorite) {
         this.context = context;
+
+        //Obtiene la lista normal o la de favoritos dependiendo de la bandera favorite
         contacts = new ArrayList<>();
         if (favorite) {
             for (Contact contact : MainActivity.contacts) {
@@ -41,9 +42,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
                 }
             }
         } else {
-            for (Contact contact : MainActivity.contacts) {
-                contacts.add(contact);
-            }
+            contacts.addAll(MainActivity.contacts);
         }
     }
 
@@ -64,12 +63,14 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
         Uri imageUri = Uri.parse(contact.getImageUri());
         ImageHandler.loadImage(context, holder.imageImageView, imageUri);
 
+        //Si el contacto ya esta marcado como favorito cambia la imagen del checkbox
         if (contact.isFavorite()) {
             holder.favoriteButton.setChecked(true);
         } else {
             holder.favoriteButton.setChecked(false);
         }
 
+        //Da funcionalidad al checkbox, si se marca el contacto se agrega a la lista de favoritos
         holder.favoriteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -83,21 +84,14 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
             }
         });
 
+        //Abre una actividad o crea un fragmento dependiendo de la orientacion
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (v.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-                    Intent intent = new Intent(context.getApplicationContext(), ContactInfoActivity.class);
-                    intent.setAction(Intent.ACTION_SEND);
-                    MainActivity.selectedContact = contact;
-                    context.startActivity(intent);
+                    openContact(contact);
                 } else if (v.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                    MainActivity.selectedContact = contact;
-                    ContactInfoFragment fragment = new ContactInfoFragment();
-                    FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
-                    FragmentTransaction transaction = fragmentManager.beginTransaction();
-                    transaction.replace(R.id.contactInfoFragment, fragment);
-                    transaction.commit();
+                    loadContactFragment(contact);
                 }
             }
         });
@@ -106,6 +100,24 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
     @Override
     public int getItemCount() {
         return contacts.size();
+    }
+
+    //Abre una nueva actividad para la informacion del contacto en orientacion portrait
+    private void openContact(Contact contact) {
+        Intent intent = new Intent(context.getApplicationContext(), ContactInfoActivity.class);
+        intent.setAction(Intent.ACTION_SEND);
+        MainActivity.selectedContact = contact;
+        context.startActivity(intent);
+    }
+
+    //Crea el fragmento del contacto para la orientacion landscape
+    private void loadContactFragment(Contact contact) {
+        MainActivity.selectedContact = contact;
+        ContactInfoFragment fragment = new ContactInfoFragment();
+        FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.contactInfoFragment, fragment);
+        transaction.commit();
     }
 
     public class ContactViewHolder extends RecyclerView.ViewHolder {

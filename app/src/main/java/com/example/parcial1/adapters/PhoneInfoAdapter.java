@@ -1,22 +1,16 @@
-package com.example.parcial1;
+package com.example.parcial1.adapters;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.net.Uri;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
+
+import com.example.parcial1.R;
+import com.example.parcial1.activities.CallActivity;
 
 import java.util.List;
 
@@ -44,6 +38,7 @@ public class PhoneInfoAdapter extends RecyclerView.Adapter<PhoneInfoAdapter.Phon
         final String phone = phones.get(position);
         holder.phoneTextView.setText(phone);
 
+        //Abre la actividad para realizar la llamada
         holder.callButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

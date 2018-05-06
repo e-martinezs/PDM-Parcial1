@@ -1,4 +1,4 @@
-package com.example.parcial1;
+package com.example.parcial1.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+
+import com.example.parcial1.R;
 
 import java.util.List;
 
@@ -35,6 +37,8 @@ public class PhoneEditAdapter extends RecyclerView.Adapter<PhoneEditAdapter.Phon
     public void onBindViewHolder(final PhoneViewHolder holder, final int position) {
         final String phone = phones.get(position);
         holder.phoneEditText.setText(phone);
+
+        //Actualiza la lista de telefonos cuando se cambia el contenido del edit text
         holder.phoneEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -56,8 +60,8 @@ public class PhoneEditAdapter extends RecyclerView.Adapter<PhoneEditAdapter.Phon
         holder.deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-              phones.remove(holder.getAdapterPosition());
-              adapter.notifyDataSetChanged();
+                phones.remove(holder.getAdapterPosition());
+                adapter.notifyDataSetChanged();
             }
         });
 
