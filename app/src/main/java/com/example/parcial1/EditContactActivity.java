@@ -1,6 +1,7 @@
 package com.example.parcial1;
 
 import android.Manifest;
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -19,17 +20,20 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class EditContactActivity extends AppCompatActivity {
+public class EditContactActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
 
     public static final int PICK_IMAGE = 1;
     private Uri uri;
     private ImageView imageView;
     private ArrayList<String> phones = new ArrayList<>();
+    private TextView dateTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +45,7 @@ public class EditContactActivity extends AppCompatActivity {
         final EditText idEditText = findViewById(R.id.add_idEditText);
         final EditText emailEditText = findViewById(R.id.add_emailEditText);
         final EditText addressEditText = findViewById(R.id.add_addressEditText);
+        dateTextView = findViewById(R.id.add_dateTextView);
         imageView = findViewById(R.id.add_imageImageView);
 
         final Contact contact = MainActivity.selectedContact;
@@ -86,6 +91,15 @@ public class EditContactActivity extends AppCompatActivity {
             }
         });
 
+        final DatePickerFragment dialog = new DatePickerFragment();
+        final Button dateButton = findViewById(R.id.add_dateButton);
+        dateButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                dialog.show(getSupportFragmentManager(), "datePicker");
+            }
+        });
+
         Button editButton = findViewById(R.id.add_addButton);
         editButton.setText("Save");
         editButton.setOnClickListener(new View.OnClickListener() {
@@ -96,6 +110,7 @@ public class EditContactActivity extends AppCompatActivity {
                 String id = idEditText.getText().toString();
                 String email = emailEditText.getText().toString();
                 String address = addressEditText.getText().toString();
+                String date = dateTextView.getText().toString();
                 if (uri == null) {
                     uri = Contact.defaultUri;
                 }
@@ -112,6 +127,7 @@ public class EditContactActivity extends AppCompatActivity {
                 contact.setAddress(address);
                 contact.setImageUri(uri.toString());
                 contact.setPhones(phones);
+                contact.setDate(date);
                 MainActivity.viewPagerAdapter.notifyDataSetChanged();
 
                 Intent intent = new Intent(getApplicationContext(), ContactInfoActivity.class);
@@ -164,5 +180,11 @@ public class EditContactActivity extends AppCompatActivity {
         }
         bundle.putStringArrayList("PHONES", phones);
         super.onSaveInstanceState(bundle);
+    }
+
+    @Override
+    public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+        String date = year+"-"+month+"-"+day;
+        dateTextView.setText(date);
     }
 }

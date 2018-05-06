@@ -25,13 +25,14 @@ import android.widget.TextView;
 
 public class ContactInfoFragment extends Fragment {
 
-    ImageView imageImageView;
-    TextView nameTextView;
-    TextView emailTextView;
-    TextView idTextView;
-    TextView addressTextView;
-    RecyclerView recyclerView;
-    Contact contact;
+    private ImageView imageImageView;
+    private TextView nameTextView;
+    private TextView emailTextView;
+    private TextView idTextView;
+    private TextView addressTextView;
+    private TextView dateTextView;
+    private RecyclerView recyclerView;
+    private Contact contact;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,6 +49,7 @@ public class ContactInfoFragment extends Fragment {
         idTextView = view.findViewById(R.id.info_idTextView);
         addressTextView = view.findViewById(R.id.info_addressTextView);
         recyclerView = view.findViewById(R.id.info_phonesRecyclerView);
+        dateTextView = view.findViewById(R.id.info_dateTextView);
 
         loadContactData();
 
@@ -115,6 +117,7 @@ public class ContactInfoFragment extends Fragment {
             emailTextView.setText(contact.getEmail());
             idTextView.setText(contact.getId());
             addressTextView.setText(contact.getAddress());
+            dateTextView.setText(contact.getDate());
         }
     }
 }

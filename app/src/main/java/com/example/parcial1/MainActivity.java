@@ -153,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
                 String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
 
                 Uri defaultUri = Uri.parse("android.resource://" + getPackageName() + "/drawable/ic_person");
-                Contact contact = new Contact(name, "", id, new ArrayList<String>(), "", "", defaultUri.toString());
+                Contact contact = new Contact(name, "", id, new ArrayList<String>(), "", "", "", defaultUri.toString());
                 full_contacts.add(contact);
 
                 //Get phone number
@@ -193,14 +193,24 @@ public class MainActivity extends AppCompatActivity {
                     imageUri = defaultUri;
                 }
                 contact.setImageUri(imageUri.toString());
+
+                //Get birthday
+                Cursor bdcur = getContactsBirthdays();
+                int bDayColumn = bdcur.getColumnIndex(ContactsContract.CommonDataKinds.Event.START_DATE);
+                String bDay = "";
+                while (bdcur.moveToNext()) {
+                    bDay = bdcur.getString(bDayColumn);
+                }
+                contact.setDate(bDay);
             }
         }
     }
 
     public Uri getPhotoUri(long contactId) {
         ContentResolver contentResolver = getContentResolver();
+        Cursor cursor;
         try {
-            Cursor cursor = contentResolver.query(ContactsContract.Data.CONTENT_URI, null, ContactsContract.Data.CONTACT_ID + "=" + contactId + " AND " + ContactsContract.Data.MIMETYPE + "='" + ContactsContract.CommonDataKinds.Photo.CONTENT_ITEM_TYPE + "'", null, null);
+            cursor = contentResolver.query(ContactsContract.Data.CONTENT_URI, null, ContactsContract.Data.CONTACT_ID + "=" + contactId + " AND " + ContactsContract.Data.MIMETYPE + "='" + ContactsContract.CommonDataKinds.Photo.CONTENT_ITEM_TYPE + "'", null, null);
             if (cursor != null) {
                 if (!cursor.moveToFirst()) {
                     return null;
@@ -208,14 +218,22 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 return null;
             }
-            cursor.close();
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
-
+        cursor.close();
         Uri person = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, contactId);
         return Uri.withAppendedPath(person, ContactsContract.Contacts.Photo.CONTENT_DIRECTORY);
+    }
+
+    private Cursor getContactsBirthdays() {
+        Uri uri = ContactsContract.Data.CONTENT_URI;
+        String[] projection = new String[] {ContactsContract.Contacts.DISPLAY_NAME, ContactsContract.CommonDataKinds.Event.CONTACT_ID, ContactsContract.CommonDataKinds.Event.START_DATE};
+        String where = ContactsContract.Data.MIMETYPE + "= ? AND " + ContactsContract.CommonDataKinds.Event.TYPE + "=" + ContactsContract.CommonDataKinds.Event.TYPE_BIRTHDAY;
+        String[] selectionArgs = new String[] {ContactsContract.CommonDataKinds.Event.CONTENT_ITEM_TYPE};
+        String sortOrder = null;
+        return managedQuery(uri, projection, where, selectionArgs, sortOrder);
     }
 
     private void doSearch(String query) {

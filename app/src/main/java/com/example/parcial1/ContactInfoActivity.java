@@ -31,6 +31,7 @@ public class ContactInfoActivity extends AppCompatActivity {
         TextView emailTextView = findViewById(R.id.info_emailTextView);
         TextView idTextView = findViewById(R.id.info_idTextView);
         TextView addressTextView = findViewById(R.id.info_addressTextView);
+        TextView dateTextView = findViewById(R.id.info_dateTextView);
 
         final Contact contact = MainActivity.selectedContact;
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
@@ -52,6 +53,7 @@ public class ContactInfoActivity extends AppCompatActivity {
         emailTextView.setText(contact.getEmail());
         idTextView.setText(contact.getId());
         addressTextView.setText(contact.getAddress());
+        dateTextView.setText(contact.getDate());
 
         Button shareButton = findViewById(R.id.info_shareButton);
         shareButton.setOnClickListener(new View.OnClickListener(){

@@ -6,6 +6,7 @@ import android.os.Parcelable;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -18,17 +19,17 @@ public class Contact implements Parcelable {
     private String address;
     private ArrayList<String> phones;
     private String imageUri;
-    private Date date;
-    private boolean toDelete = false;
+    private String date;
     private boolean favorite = false;
 
-    public Contact(String name, String lastName, String id, ArrayList<String> phones, String email, String address, String imageUri) {
+    public Contact(String name, String lastName, String id, ArrayList<String> phones, String email, String address, String date, String imageUri) {
         this.name = name;
         this.lastName = lastName;
         this.id = id;
         this.phones = phones;
         this.email = email;
         this.address = address;
+        this.date = date;
         this.imageUri = imageUri;
     }
 
@@ -39,6 +40,7 @@ public class Contact implements Parcelable {
         email = in.readString();
         address = in.readString();
         phones = new ArrayList<>();
+        date = in.readString();
         in.readList(phones, null);
         imageUri = in.readString();
         favorite = in.readByte() != 0;
@@ -69,6 +71,7 @@ public class Contact implements Parcelable {
         parcel.writeString(email);
         parcel.writeString(address);
         parcel.writeList(phones);
+        parcel.writeString(date);
         parcel.writeString(imageUri);
         parcel.writeByte((byte) (favorite ? 1 : 0));
     }
@@ -137,19 +140,11 @@ public class Contact implements Parcelable {
         this.phones = phones;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
-    }
-
-    public boolean isToDelete() {
-        return toDelete;
-    }
-
-    public void setToDelete(boolean toDelete) {
-        this.toDelete = toDelete;
     }
 }
