@@ -40,7 +40,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="8dp"
-                android:text="Name"
+                android:text="@string/text_name"
                 android:textAlignment="center"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
@@ -48,7 +48,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
-                android:text="Id"
+                android:text="@string/text_id"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
             <View
@@ -62,7 +62,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="8dp"
-                android:text="Id"
+                android:text="@string/text_id"
                 android:textAlignment="center"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
@@ -70,7 +70,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
-                android:text="Phone numbers"
+                android:text="@string/text_phone_numbers"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
             <View
@@ -89,7 +89,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
-                android:text="E-mail"
+                android:text="@string/text_email"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
             <View
@@ -103,7 +103,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="8dp"
-                android:text="Email"
+                android:text="@string/text_email"
                 android:textAlignment="center"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
@@ -111,7 +111,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
-                android:text="Address"
+                android:text="@string/text_address"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
             <View
@@ -125,7 +125,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="8dp"
-                android:text="Address"
+                android:text="@string/text_address"
                 android:textAlignment="center"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
@@ -133,7 +133,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
-                android:text="Birthday"
+                android:text="@string/text_birthday"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
             <View
@@ -147,7 +147,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="8dp"
-                android:text="Birthday"
+                android:text="@string/text_birthday"
                 android:textAlignment="center"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 

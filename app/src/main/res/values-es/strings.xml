@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Contactos</string>
+    <string name="tab_contacts">Contactos</string>
+    <string name="tab_favorites">Favoritos</string>
+    <string name="text_name">Nombre</string>
+    <string name="text_last_name">Apellido</string>
+    <string name="text_id">Id</string>
+    <string name="text_phone_number">Número de teléfono</string>
+    <string name="text_phone_numbers">Números de teléfono</string>
+    <string name="text_email">Correo electrónico</string>
+    <string name="text_address">Dirección</string>
+    <string name="text_birthday">Cumpleaños</string>
+    <string name="text_date_format">YYYY-MM-DD</string>
+    <string name="text_button_add">Agregar</string>
+    <string name="text_button_save">Guardar</string>
+    <string name="text_intent_image">Selecccionar imagen</string>
+    <string name="text_intent_share">Compartir</string>
+    <string name="text_warning_name">El contacto debe tener un nombre</string>
+    <string name="text_dialog_are_you_sure">¿Estás seguro?</string>
+    <string name="text_yes">Si</string>
+    <string name="text_no">No</string>
+</resources>

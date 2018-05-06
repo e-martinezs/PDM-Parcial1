@@ -2,5 +2,21 @@
     <string name="app_name">Contacts</string>
     <string name="tab_contacts">Contacts</string>
     <string name="tab_favorites">Favorites</string>
-    <string name="title_activity_delete">DELETE</string>
+    <string name="text_name">Name</string>
+    <string name="text_last_name">Last Name</string>
+    <string name="text_id">Id</string>
+    <string name="text_phone_number">Phone number</string>
+    <string name="text_phone_numbers">Phone numbers</string>
+    <string name="text_email">E-mail</string>
+    <string name="text_address">Address</string>
+    <string name="text_birthday">Birthday</string>
+    <string name="text_date_format">YYYY-MM-DD</string>
+    <string name="text_button_add">Add</string>
+    <string name="text_button_save">Save</string>
+    <string name="text_intent_image">Select Image</string>
+    <string name="text_intent_share">Share</string>
+    <string name="text_warning_name">Contact must have a name</string>
+    <string name="text_dialog_are_you_sure">Are you sure?</string>
+    <string name="text_yes">Yes</string>
+    <string name="text_no">No</string>
 </resources>

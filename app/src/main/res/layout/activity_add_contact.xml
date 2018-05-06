@@ -10,7 +10,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <FrameLayout
@@ -44,7 +44,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
-                android:text="Name"
+                android:text="@string/text_name"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
             <EditText
@@ -52,7 +52,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
-                android:hint="Name"
+                android:hint="@string/text_name"
                 android:inputType="text"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
@@ -60,7 +60,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
-                android:text="Last Name"
+                android:text="@string/text_last_name"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
             <EditText
@@ -68,7 +68,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
-                android:hint="Last Name"
+                android:hint="@string/text_last_name"
                 android:inputType="text"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
@@ -76,7 +76,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
-                android:text="Id"
+                android:text="@string/text_id"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
             <EditText
@@ -84,7 +84,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
-                android:hint="Id"
+                android:hint="@string/text_id"
                 android:inputType="text"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
@@ -97,7 +97,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:layout_weight="1"
-                    android:text="Phone number"
+                    android:text="@string/text_phone_numbers"
                     android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
                 <ImageButton
@@ -123,7 +123,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
-                android:text="Email"
+                android:text="@string/text_email"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large" />8dp
 
             <EditText
@@ -131,7 +131,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
-                android:hint="Email"
+                android:hint="@string/text_email"
                 android:inputType="textEmailAddress"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
@@ -139,7 +139,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
-                android:text="Address"
+                android:text="@string/text_address"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
             <EditText
@@ -147,7 +147,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
-                android:hint="Address"
+                android:hint="@string/text_address"
                 android:inputType="text"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
@@ -155,7 +155,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
-                android:text="Birthday"
+                android:text="@string/text_birthday"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
             <LinearLayout
@@ -167,10 +167,10 @@
                     android:id="@+id/add_dateTextView"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_margin="8dp"
-                    android:hint="YYYY-MM-DD"
+                    android:layout_weight="1"
                     android:focusable="false"
+                    android:hint="@string/text_date_format"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
                 <ImageButton
@@ -181,8 +181,7 @@
                     android:background="@color/colorAccent"
                     android:elevation="2dp"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/ic_calendar"
-                    android:text="Set" />
+                    android:src="@drawable/ic_calendar" />
             </LinearLayout>
 
             <Button
@@ -193,7 +192,7 @@
                 android:layout_margin="8dp"
                 android:background="@color/colorAccent"
                 android:elevation="2dp"
-                android:text="Add" />
+                android:text="@string/text_button_add" />
         </LinearLayout>
     </ScrollView>
 </FrameLayout>

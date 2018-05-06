@@ -115,23 +115,23 @@ public class ContactInfoFragment extends Fragment {
     //Crea un intent para compartir la informacion del contacto
     private void shareData() {
         Intent intent = new Intent(Intent.ACTION_SEND);
-        String text = "Name: " + contact.getName() + " " + contact.getLastName();
+        String text = getString(R.string.text_name)+": " + contact.getName() + " " + contact.getLastName();
         if (!contact.getEmail().equals("")) {
-            text = text.concat("\nEmail: " + contact.getEmail());
+            text = text.concat("\n"+getString(R.string.text_email)+": " + contact.getEmail());
         }
         if (!contact.getAddress().equals("")) {
-            text = text.concat("\nAddress: " + contact.getAddress());
+            text = text.concat("\n"+getString(R.string.text_address)+": " + contact.getAddress());
         }
         if (!contact.getDate().equals("")) {
-            text = text.concat("\nBirthday: " + contact.getDate());
+            text = text.concat("\n"+getString(R.string.text_birthday)+": " + contact.getDate());
         }
-        text = text.concat("\nPhone numbers: ");
+        text = text.concat("\n"+getString(R.string.text_phone_numbers)+": ");
         for (String s : contact.getPhones()) {
             text = text.concat("\n " + s);
         }
         intent.putExtra(Intent.EXTRA_TEXT, text);
         intent.setType("text/plain");
-        startActivity(Intent.createChooser(intent, "Share"));
+        startActivity(Intent.createChooser(intent, getString(R.string.text_intent_share)));
     }
 
     //Muestra una dialogo para asegurarse que no se apreto el boton borrar por error
@@ -156,6 +156,6 @@ public class ContactInfoFragment extends Fragment {
         };
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setMessage("Are you sure?").setPositiveButton("Yes", dialogClickListener).setNegativeButton("No", dialogClickListener).show();
+        builder.setMessage(R.string.text_dialog_are_you_sure).setPositiveButton(R.string.text_yes, dialogClickListener).setNegativeButton(R.string.text_no, dialogClickListener).show();
     }
 }

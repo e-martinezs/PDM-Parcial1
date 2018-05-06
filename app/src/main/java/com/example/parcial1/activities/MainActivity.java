@@ -192,7 +192,7 @@ public class MainActivity extends AppCompatActivity {
                 String id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
                 String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
 
-                Uri defaultUri = Uri.parse("android.resource://" + getPackageName() + "/drawable/ic_person");
+                Uri defaultUri = Contact.defaultUri;
                 Contact contact = new Contact(name, "", id, new ArrayList<String>(), "", "", "", defaultUri.toString());
                 full_contacts.add(contact);
 

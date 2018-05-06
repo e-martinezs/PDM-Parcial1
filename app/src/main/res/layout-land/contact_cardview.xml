@@ -35,7 +35,7 @@
                 android:layout_margin="8dp"
                 android:layout_weight="3"
                 android:maxLines="1"
-                android:text="Name"
+                android:text="@string/text_name"
                 android:textAlignment="center"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 

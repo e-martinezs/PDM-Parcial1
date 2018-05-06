@@ -59,6 +59,7 @@ public class AddContactActivity extends AppCompatActivity implements DatePickerD
         phones = new ArrayList<>();
         if (savedInstanceState == null) {
             uri = Contact.defaultUri;
+            phones.add("");
         } else {
             uri = Uri.parse(savedInstanceState.getString("URI"));
             phones.addAll(savedInstanceState.getStringArrayList("PHONES"));
@@ -119,7 +120,7 @@ public class AddContactActivity extends AppCompatActivity implements DatePickerD
 
         //Revisa si el nombre no esta vacio, si no muestra una advertencia
         if (name.equals("")) {
-            Snackbar snackbar = Snackbar.make(view, "Contact must have a name", Snackbar.LENGTH_SHORT);
+            Snackbar snackbar = Snackbar.make(view, R.string.text_warning_name, Snackbar.LENGTH_SHORT);
             snackbar.show();
         } else {
             if (uri == null) {
@@ -149,7 +150,7 @@ public class AddContactActivity extends AppCompatActivity implements DatePickerD
             getIntent.setType("image/*");
             Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             pickIntent.setType("image/*");
-            Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
+            Intent chooserIntent = Intent.createChooser(getIntent, getString(R.string.text_intent_image));
             chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{pickIntent});
             startActivityForResult(chooserIntent, PICK_IMAGE);
         }

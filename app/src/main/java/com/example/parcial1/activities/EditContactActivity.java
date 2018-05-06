@@ -110,7 +110,7 @@ public class EditContactActivity extends AppCompatActivity implements DatePicker
         });
 
         Button editButton = findViewById(R.id.add_addButton);
-        editButton.setText("Save");
+        editButton.setText(R.string.text_button_save);
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -129,7 +129,7 @@ public class EditContactActivity extends AppCompatActivity implements DatePicker
         String date = dateEditText.getText().toString();
 
         if (name.equals("")) {
-            Snackbar snackbar = Snackbar.make(view, "Contact must have a name", Snackbar.LENGTH_SHORT);
+            Snackbar snackbar = Snackbar.make(view, R.string.text_warning_name, Snackbar.LENGTH_SHORT);
             snackbar.show();
         } else {
             if (uri == null) {
@@ -168,7 +168,7 @@ public class EditContactActivity extends AppCompatActivity implements DatePicker
             getIntent.setType("image/*");
             Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             pickIntent.setType("image/*");
-            Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
+            Intent chooserIntent = Intent.createChooser(getIntent, getString(R.string.text_intent_image));
             chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{pickIntent});
             startActivityForResult(chooserIntent, PICK_IMAGE);
         }

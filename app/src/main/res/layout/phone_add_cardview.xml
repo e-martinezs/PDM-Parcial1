@@ -24,7 +24,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
                 android:layout_weight="2"
-                android:hint="Phone number"
+                android:hint="@string/text_phone_number"
                 android:inputType="phone"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
