@@ -127,13 +127,14 @@ public class AddContactActivity extends AppCompatActivity implements DatePickerD
                 uri = Contact.defaultUri;
             }
             //Remueve los numeros de telefono vacios
+            ArrayList<String> newPhones = new ArrayList<>();
             for (int i = 0; i < phones.size(); i++) {
                 String s = phones.get(i);
-                if (s.isEmpty()) {
-                    phones.remove(i);
+                if (!s.isEmpty()) {
+                    newPhones.add(s);
                 }
             }
-            Contact contact = new Contact(name, lastName, id, phones, email, address, date, uri.toString());
+            Contact contact = new Contact(name, lastName, id, newPhones, email, address, date, uri.toString());
             MainActivity.selectedContact = contact;
             MainActivity.addContact(contact);
             finish();

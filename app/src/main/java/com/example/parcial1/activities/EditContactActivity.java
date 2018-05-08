@@ -128,6 +128,7 @@ public class EditContactActivity extends AppCompatActivity implements DatePicker
         String address = addressEditText.getText().toString();
         String date = dateEditText.getText().toString();
 
+        //Revisa si el nombre no esta vacio, si no muestra una advertencia
         if (name.equals("")) {
             Snackbar snackbar = Snackbar.make(view, R.string.text_warning_name, Snackbar.LENGTH_SHORT);
             snackbar.show();
@@ -135,19 +136,22 @@ public class EditContactActivity extends AppCompatActivity implements DatePicker
             if (uri == null) {
                 uri = Contact.defaultUri;
             }
+            //Remueve los numeros de telefono vacios
+            ArrayList<String> newPhones = new ArrayList<>();
             for (int i = 0; i < phones.size(); i++) {
                 String s = phones.get(i);
-                if (s.isEmpty()) {
-                    phones.remove(i);
+                if (!s.isEmpty()) {
+                    newPhones.add(s);
                 }
             }
+
             contact.setName(name);
             contact.setLastName(lastName);
             contact.setId(id);
             contact.setEmail(email);
             contact.setAddress(address);
             contact.setImageUri(uri.toString());
-            contact.setPhones(phones);
+            contact.setPhones(newPhones);
             contact.setDate(date);
             MainActivity.viewPagerAdapter.notifyDataSetChanged();
 
